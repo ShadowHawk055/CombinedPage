@@ -232,7 +232,15 @@
       }
     ],
     "projects": [],
-    "models": [],
+    "models": [
+      {
+        "title": "Gatlyn / T3arena",
+        "description": "",
+        "file": "models/gatlyn.glb",
+        "shape": "cube",
+        "color": "#3d6bff"
+      }
+    ],
     "videos": [
       {
         "title": "Pixels",
