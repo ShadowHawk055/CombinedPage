@@ -1,0 +1,301 @@
+{
+  "a": {
+    "name": "Dawnseeker",
+    "avatar": "DA",
+    "accent": "#3d6bff",
+    "location": "Laterano, Terra",
+    "email": "maya@example.com",
+    "roles": [
+      "Audio Visualizer Artist",
+      "3D artist",
+      "3D Animator"
+    ],
+    "tagline": "Believable fictional objects. Animated with kinetic mastery. Tying everything into what feels like a real product.\nClean and groundbreaking projects on the visualizer market. Expert of visual mimicry.",
+    "bio": "Lead designer at Raythean industries. Consultant designer of Black Steel Worldwide. ",
+    "stats": [
+      {
+        "value": "8",
+        "label": "Years Designing"
+      },
+      {
+        "value": "50+",
+        "label": "Visuals Available"
+      },
+      {
+        "value": "8",
+        "label": "Featured Project Awards"
+      },
+      {
+        "value": "5+",
+        "label": "3D Models Created"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Blender",
+        "level": 88
+      },
+      {
+        "name": "Blockbench",
+        "level": 70
+      },
+      {
+        "name": "Vizzy.io",
+        "level": 95
+      }
+    ],
+    "experience": [
+      {
+        "period": "2018 to now",
+        "title": "Lead designer",
+        "org": "Raythean Industries",
+        "text": "Machines, weaponry and arts units of the DM Line. All managed and formed into perfection"
+      },
+      {
+        "period": "2022 to now",
+        "title": "Weapon Systems Consultant",
+        "org": "Black Steel Worldwide",
+        "text": "High end firearms and arts units, focused on usability and reliability."
+      },
+      {
+        "period": "2020 to now",
+        "title": "Featured Creator",
+        "org": "vizzy.io",
+        "text": "-"
+      }
+    ],
+    "links": [
+      {
+        "label": "vizzy.io",
+        "url": "https://vizzy.io/user?uid=hdrv5CQqwvbSrN3mzCUwnP0BqjG3"
+      },
+      {
+        "label": "youtube.com",
+        "url": "https://www.youtube.com/@phoenixmusic2841"
+      }
+    ],
+    "projects": [
+      {
+        "title": "Terminal",
+        "description": "A sci-fi HUD styled visualizer featuring different visualizer styles, audio information, and various reacting effects.",
+        "tags": [
+          "Visualizer"
+        ],
+        "link": "https://vizzy.io/project?id=mcVr2L1cvl82mHoW6z2sI"
+      },
+      {
+        "title": "3D Glass 2-In-1",
+        "description": "2 visualizers with a 3D perspective. In one project. Featuring different themes, glass effect, and highly customizable.",
+        "tags": [
+          "Visualizer"
+        ],
+        "link": "https://vizzy.io/project?id=OwKSRJGW4LQua7adLAtHk"
+      }
+    ],
+    "models": [],
+    "videos": [
+      {
+        "title": "Torrential Downpour",
+        "description": "",
+        "style": "waves",
+        "color": "#f0457a",
+        "duration": 12,
+        "src": "https://cdn.discordapp.com/attachments/1075150995996291144/1545099389318725632/abendregen4.mp4?ex=6ac470b0&is=6ac31f30&hm=e7fb52ea6ec2c1b92334a9d9f7beadc7fa7b65029c2bd712eb258aacadcbe94b&"
+      },
+      {
+        "title": "Chaos",
+        "description": "",
+        "style": "waves",
+        "color": "#f0457a",
+        "duration": 12,
+        "src": "https://cdn.discordapp.com/attachments/1291333124289990727/1439268874720645351/chaos_-_2025-11-15_21-58-41.mp4?ex=6ac46458&is=6ac312d8&hm=31a3e621ebf3e8aea9ca64f1576d03185a4e1bf6af5eb787309b0d4cc15d27fc&"
+      },
+      {
+        "title": "AETERPHAERA",
+        "description": "",
+        "style": "waves",
+        "color": "#f0457a",
+        "duration": 12,
+        "src": "https://cdn.discordapp.com/attachments/1075150995996291144/1486740333805965453/AETERPHAERA_-_2026-03-26_21-45-54.mp4?ex=6ac46315&is=6ac31195&hm=ef345b4c05ba03c5e6465fad571d1b436cf9aa2633879fb1f507d13dc4138d08&"
+      }
+    ]
+  },
+  "b": {
+    "name": "Mahi | Reika",
+    "avatar": "DR",
+    "accent": "#f0457a",
+    "location": "Jakarta",
+    "email": "daniel@example.com",
+    "roles": [
+      "Film director",
+      "Colorist",
+      "Motion designer"
+    ],
+    "tagline": "I make short films and music videos about cities at night, and I grade every frame myself.",
+    "bio": "I run Reyes Picture Co., a three-person studio. My films have played at festivals in Busan, Rotterdam and Singapore. I direct, shoot and colorgrade, which keeps the look consistent from the first test to the final export.",
+    "stats": [
+      {
+        "value": "14",
+        "label": "short films"
+      },
+      {
+        "value": "6",
+        "label": "festival selections"
+      },
+      {
+        "value": "50+",
+        "label": "music videos"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Directing",
+        "level": 94
+      },
+      {
+        "name": "Color grading",
+        "level": 88
+      },
+      {
+        "name": "Cinematography",
+        "level": 82
+      },
+      {
+        "name": "Motion graphics",
+        "level": 76
+      },
+      {
+        "name": "Sound design",
+        "level": 64
+      }
+    ],
+    "experience": [
+      {
+        "period": "2021 to now",
+        "title": "Director and founder",
+        "org": "Reyes Picture Co.",
+        "text": "Short films, documentaries and music videos for independent labels and brands."
+      },
+      {
+        "period": "2017 to 2021",
+        "title": "Editor and colorist",
+        "org": "Lantern Films",
+        "text": "Cut and graded over 120 commercial and branded pieces."
+      },
+      {
+        "period": "2013 to 2017",
+        "title": "Film studies",
+        "org": "Jakarta Arts Institute",
+        "text": "Directing major with a focus on night photography."
+      }
+    ],
+    "links": [
+      {
+        "label": "Vimeo",
+        "url": "https://example.com/vimeo"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://example.com/instagram"
+      },
+      {
+        "label": "IMDb",
+        "url": "https://example.com/imdb"
+      }
+    ],
+    "projects": [
+      {
+        "title": "Salt Road",
+        "description": "A 17-minute short about two salt farmers and a broken truck. Shot on a single lens over nine nights. Selected for Busan and Rotterdam.",
+        "tags": [
+          "Short film"
+        ],
+        "link": "https://example.com/salt-road"
+      },
+      {
+        "title": "Night Market",
+        "description": "A documentary following three vendors through a full night at a Jakarta market, from first stall to last sweep.",
+        "tags": [
+          "Documentary"
+        ],
+        "link": "https://example.com/night-market"
+      },
+      {
+        "title": "Harbor Lights",
+        "description": "A music video for an indie band, filmed in one take from a moving boat.",
+        "tags": [
+          "Music video"
+        ],
+        "link": "https://example.com/harbor-lights"
+      },
+      {
+        "title": "Parallel Lines",
+        "description": "A 60-second commercial for a metro system, graded around one rule: only warm light inside the train.",
+        "tags": [
+          "Commercial"
+        ],
+        "link": "https://example.com/parallel-lines"
+      }
+    ],
+    "models": [
+      {
+        "title": "Title glyph",
+        "description": "The knotted logo from Salt Road's opening title, modeled for the 3D title sequence.",
+        "shape": "knot",
+        "color": "#f0457a"
+      },
+      {
+        "title": "Set piece: arch",
+        "description": "The doorway built for the Harbor Lights studio sequence.",
+        "shape": "torus",
+        "color": "#f5b83d"
+      },
+      {
+        "title": "Lens study",
+        "description": "Reference sphere used to match CG light to the on-set grey ball.",
+        "shape": "sphere",
+        "color": "#8fb4ff"
+      },
+      {
+        "title": "Counterweight",
+        "description": "A crane counterweight, modeled to plan the rig for a boat shot.",
+        "shape": "cone",
+        "color": "#e9ecf3"
+      }
+    ],
+    "videos": [
+      {
+        "title": "Salt Road: trailer",
+        "description": "Ninety seconds of the film. Add your own file or link in the editor.",
+        "style": "orbits",
+        "color": "#f0457a",
+        "duration": 12,
+        "src": ""
+      },
+      {
+        "title": "Night Market reel",
+        "description": "Highlights from three nights of shooting.",
+        "style": "grid",
+        "color": "#f5b83d",
+        "duration": 14,
+        "src": ""
+      },
+      {
+        "title": "Harbor Lights",
+        "description": "The one-take boat sequence.",
+        "style": "waves",
+        "color": "#8fb4ff",
+        "duration": 10,
+        "src": ""
+      },
+      {
+        "title": "Color grade breakdown",
+        "description": "Before and after on six scenes.",
+        "style": "grid",
+        "color": "#2fc9a0",
+        "duration": 9,
+        "src": ""
+      }
+    ]
+  }
+}
