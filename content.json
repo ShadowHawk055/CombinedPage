@@ -144,10 +144,34 @@
       }
     ],
     "photo": "image/profile/dawn.png",
-    "commissionIntro": "",
+    "commissionIntro": "I can create fully custom and editable audio visualizers for you through vizzy.io. Do note that you will receive the rights for the entire projects, not just access or just exported videos.",
     "frame": "circle",
     "commissionStatus": "open",
-    "commissions": [],
+    "commissions": [
+      {
+        "title": "Backlog",
+        "price": "$0 - $10",
+        "time": "~1 week",
+        "description": "A fully custom visualizer based on your description or reference images/videos. Price is affected by my availability and emotional status. Quality will stay high.",
+        "features": [
+          "Visualizer Project",
+          "0-2 revisions"
+        ],
+        "featured": "no"
+      },
+      {
+        "title": "Frontline",
+        "price": "From $20",
+        "time": "~3 days",
+        "description": "A fully custom visualizer based on your description or reference image/videos. Price is affected by complexity. Ease of usability and documentation is guaranteed",
+        "features": [
+          "Visualizer Project",
+          "Up to 5 revisions",
+          "1 week support"
+        ],
+        "featured": "no"
+      }
+    ],
     "background": {
       "enabled": "on",
       "dotColor": "#3d6bff",
