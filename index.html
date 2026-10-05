@@ -543,7 +543,7 @@ function renderChrome(p) {
   $('#nav').innerHTML = PAGES.map(([id, l]) => `<a href="#${cur.pid}/${id}"${id === cur.page ? ' aria-current="page"' : ''}>${l}</a>`).join('');
   const seg = $('#seg'); seg.dataset.i = cur.pid === 'a' ? 0 : 1;
   seg.querySelectorAll('button').forEach(b => { b.textContent = first(data[b.dataset.p].name) || 'Person'; b.setAttribute('aria-pressed', b.dataset.p === cur.pid); });
-  $('#foot').textContent = `${p.name}. ${p.email ? 'Contact: ' + p.email + '. ' : ''}${new Date().getFullYear()} code goldfish`;
+  $('#foot').textContent = `${p.name}. ${p.email ? 'Contact: ' + p.email + '. ' : ''}${new Date().getFullYear()} | code goldfish`;
   document.title = `${p.name}${p.roles[0] ? ' | ' + p.roles[0] : ''}`;
   const em = document.querySelector('link[rel=icon]');
 }
