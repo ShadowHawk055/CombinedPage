@@ -238,30 +238,9 @@
       }
     ],
     "models": [
-      {
-        "title": "Title glyph",
-        "description": "The knotted logo from Salt Road's opening title, modeled for the 3D title sequence.",
-        "shape": "knot",
-        "color": "#f0457a"
-      },
-      {
-        "title": "Set piece: arch",
-        "description": "The doorway built for the Harbor Lights studio sequence.",
-        "shape": "torus",
-        "color": "#f5b83d"
-      },
-      {
-        "title": "Lens study",
-        "description": "Reference sphere used to match CG light to the on-set grey ball.",
-        "shape": "sphere",
-        "color": "#8fb4ff"
-      },
-      {
-        "title": "Counterweight",
-        "description": "A crane counterweight, modeled to plan the rig for a boat shot.",
-        "shape": "cone",
-        "color": "#e9ecf3"
-      }
+      { "title": "Nuclear Meltdown - SMG", "description": "SMG form of the Nuclear Meltdown composite armaments", "file": "models/hyperreal gun.glb" },
+      { "title": "Nuclear Meltdown - Case", "description": "Case form of the Nuclear Meltdown composite armaments", "file": "models/hyperreal case.glb" },
+      { "title": "Composite Armaments - Cannon", "description": "Cannon form of composite armaments", "file": "models/hyperreal cannon.glb" }
     ],
     "videos": [
       {
