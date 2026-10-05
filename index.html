@@ -301,7 +301,7 @@ footer{max-width:1180px;margin:0 auto;padding:1.5rem clamp(1rem,4vw,2.5rem) 2.5r
   <p class="dnote" id="dnote"></p>
   <div class="tabs"><button type="button" data-tab="form" aria-pressed="true">Fields</button><button type="button" data-tab="json" aria-pressed="false">Paste or export JSON</button></div>
   <div class="dbody" id="dbody"></div>
-  <div class="dfoot"><button type="button" class="mini" id="resetBtn">Discard my edits</button><span id="msg" role="status"></span></div>
+  <div class="dfoot"><button type="button" class="mini" id="resetBtn">Discard edits for this person</button><span id="msg" role="status"></span></div>
 </aside>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
@@ -460,7 +460,11 @@ const GOLDFISH_AUDIO = 'audio/goldfish.mp3';
 const $ = (s, r = document) => r.querySelector(s);
 const view = $('#view');
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const KEY = 'portfolio-content-v1';
+const KEY = 'portfolio-content-v2';          // each person gets their own draft: KEY + '-a' / KEY + '-b'
+const FILES = { a: 'dawnseeker.json', b: 'reika.json' };   // one content file per person
+const IDS = ['a', 'b'];
+const keyOf = id => KEY + '-' + id;
+const pidOf = path => path.split('.')[0];
 const PAGES = [['about', 'About'], ['work', 'Work'], ['models', '3D models'], ['videos', 'Videos'], ['commissions', 'Commissions']];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const clone = o => JSON.parse(JSON.stringify(o));
@@ -491,19 +495,21 @@ function normalize(d) {
   return d;
 }
 const djb = s => { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return String(h >>> 0); };
-/* Content comes from content.json next to this page when it exists, otherwise from DEFAULTS above.
-   Edits made in the editor are kept as a draft in this browser, tied to the version of content.json
-   they were based on, so a newer content.json always wins over an old draft. */
+/* Each person's content comes from their own file next to this page (dawnseeker.json, reika.json) when it exists,
+   otherwise from DEFAULTS above. Edits made in the editor are kept as a per-person draft in this browser, tied to
+   the version of that person's file they were based on, so a newer file always wins over an old draft. */
 let data = normalize(clone(DEFAULTS));
-fetch('content.json', { cache: 'no-cache' })
-  .then(r => r.ok ? r.json() : Promise.reject())
-  .then(j => { data = normalize(j); })
-  .catch(() => { })          // falls back to DEFAULTS if the file is missing
-  .finally(() => go(true));  // start the page after loading
-const srcNote = () => SRC === 'file' ? 'Loaded from content.json.' : SRC === 'draft' ? 'Showing your unsaved edits from this browser.' : 'No content.json found, so the built-in sample content is used.';
+/* Per-person state, so editing one profile can never touch the other:
+   base = what that person's .json file contained (or the built-in sample), SRC = where the content came from. */
+const base = { a: { data: clone(data.a), hash: 'defaults' }, b: { data: clone(data.b), hash: 'defaults' } };
+const SRC = { a: 'defaults', b: 'defaults' };
+const srcNote = id => SRC[id] === 'file' ? `Loaded from ${FILES[id]}.` : SRC[id] === 'draft' ? 'Showing your unsaved edits from this browser.' : `No ${FILES[id]} found, so the built-in sample content is used.`;
 const stripSession = (k, v) => Array.isArray(v) ? v.filter(x => !(x && x._session)) : v;
-let saveT;
-function save() { SRC = 'draft'; clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(KEY, JSON.stringify({ base: baseHash, data }, stripSession)); } catch (e) { } }, 200); }
+const saveT = {};
+function save(id) {
+  SRC[id] = 'draft'; clearTimeout(saveT[id]);
+  saveT[id] = setTimeout(() => { try { localStorage.setItem(keyOf(id), JSON.stringify({ base: base[id].hash, data: data[id] }, stripSession)); } catch (e) { } }, 200);
+}
 const getAt = path => path.split('.').reduce((o, k) => o[k], data);
 function setAt(path, v) { const ks = path.split('.'), last = ks.pop(); ks.reduce((o, k) => o[k], data)[last] = v; }
 
@@ -1095,14 +1101,14 @@ function formHTML(pid) {
   html += ['stats', 'skills', 'experience', 'links', 'projects', 'models', 'videos', 'commissions'].map(g => `<details class="grp"${openPath.startsWith(pid + '.' + g + '.') ? ' open' : ''}><summary>${esc(lab(g))}<small>${p[g].length}</small></summary>${g === 'commissions' ? node(p.commissionStatus, pid + '.commissionStatus', 'commissionStatus') + node(p.commissionIntro, pid + '.commissionIntro', 'commissionIntro') : ''}${node(p[g], pid + '.' + g, g)}</details>`).join('');
   return html;
 }
-function renderDrawerNote() { $('#dnote').textContent = tab === 'form' ? `Editing ${data[editPid].name || 'this person'}. Changes are saved in this browser. Use the switch at the top of the page to preview the other person.` : ''; }
+function renderDrawerNote() { $('#dnote').textContent = tab === 'form' ? `Editing ${data[editPid].name || 'this person'}. Changes are saved in this browser, separately for each person. Use the switch at the top of the page to preview the other person.` : ''; }
 function renderDrawer() {
   renderDrawerNote();
   const pt = $('#ptabs'); pt.hidden = tab !== 'form';
   pt.innerHTML = ['a', 'b'].map(id => `<button type="button" data-ep="${id}" aria-pressed="${id === editPid}">${esc(first(data[id].name) || 'Person')}</button>`).join('');
   drawer.querySelectorAll('[data-tab]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tab === tab));
   if (tab === 'form') dbody.innerHTML = formHTML(editPid);
-  else dbody.innerHTML = `<p class="sidenote" style="margin:0 0 .6rem">${esc(srcNote())} This is all the content for both people, including the background settings. To make your edits permanent, download content.json (or copy this text into it) and put it next to index.html in your repo.</p><textarea id="json" spellcheck="false">${esc(JSON.stringify(data, stripSession, 2))}</textarea><div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.6rem"><button type="button" class="mini" id="applyJson">Apply</button><button type="button" class="mini" id="dlJson">Download content.json</button><button type="button" class="mini" id="copyJson">Copy</button><label class="mini file" style="position:relative">Load .json file<input type="file" id="jfile" accept=".json,application/json"></label></div>`;
+  else dbody.innerHTML = `<p class="sidenote" style="margin:0 0 .6rem">${esc(srcNote(editPid))} This is the content for ${esc(data[editPid].name || 'this person')} only, including the background settings. To make your edits permanent, download ${esc(FILES[editPid])} (or copy this text into it) and put it next to index.html in your repo.</p><textarea id="json" spellcheck="false">${esc(JSON.stringify(data[editPid], stripSession, 2))}</textarea><div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.6rem"><button type="button" class="mini" id="applyJson">Apply</button><button type="button" class="mini" id="dlJson">Download ${esc(FILES[editPid])}</button><button type="button" class="mini" id="copyJson">Copy</button><label class="mini file" style="position:relative">Load .json file<input type="file" id="jfile" accept=".json,application/json"></label></div>`;
 }
 function setDrawer(open) {
   drawerOpen = open; document.body.classList.toggle('editing', open); drawer.inert = !open;
@@ -1117,7 +1123,7 @@ const msg = t => { $('#msg').textContent = t; clearTimeout(msg.t); msg.t = setTi
 drawer.addEventListener('input', e => {
   const t = e.target, path = t.dataset && t.dataset.path; if (!path) return;
   setAt(path, t.dataset.num !== undefined ? (parseFloat(t.value) || 0) : t.value);
-  save(); schedRender();
+  save(pidOf(path)); schedRender();
 });
 drawer.addEventListener('click', e => {
   const tb = e.target.closest('[data-tab]'); if (tb) { tab = tb.dataset.tab; renderDrawer(); return; }
@@ -1134,15 +1140,20 @@ drawer.addEventListener('click', e => {
     } else {
       const i = path.lastIndexOf('.'); getAt(path.slice(0, i)).splice(+path.slice(i + 1), 1); openPath = '';
     }
-    save(); renderDrawer(); render({ intro: false }); return;
+    save(pidOf(path)); renderDrawer(); render({ intro: false }); return;
   }
   if (e.target.id === 'applyJson') {
-    try { const obj = JSON.parse($('#json').value); if (!obj.a || !obj.b) throw new Error('Needs both "a" and "b"'); data = normalize(obj); save(); renderDrawer(); render({ intro: false }); msg('Applied.'); }
+    try {
+      const obj = JSON.parse($('#json').value);
+      if (!obj || typeof obj !== 'object' || Array.isArray(obj)) throw new Error('Needs a single profile object');
+      if (obj.a && obj.b && !obj.name) throw new Error('This looks like the old combined file. Paste only one person');
+      data[editPid] = obj; normalize(data); save(editPid); renderDrawer(); render({ intro: false }); msg('Applied.');
+    }
     catch (err) { msg('Could not apply: ' + err.message); }
   }
   if (e.target.id === 'dlJson') {
     try {
-      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(data, stripSession, 2)], { type: 'application/json' })); a.download = 'content.json';
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(data, stripSession, 2)], { type: 'application/json' })); a.download = FILES[editPid];
       document.body.append(a); a.click(); a.remove(); msg('Downloaded. Put it next to index.html and push it to GitHub.');
     } catch (err) { msg('Download did not work here. Use Copy instead.'); }
   }
@@ -1155,7 +1166,7 @@ drawer.addEventListener('change', e => {
   const up = e.target.dataset && e.target.dataset.upload;
   if (up) {
     const uf = e.target.files[0];
-    if (uf) readImage(uf, +e.target.dataset.max || 800).then(url => { setAt(up, url); save(); renderDrawer(); render({ intro: false }); }).catch(() => msg('That image could not be read.'));
+    if (uf) readImage(uf, +e.target.dataset.max || 800).then(url => { setAt(up, url); save(pidOf(up)); renderDrawer(); render({ intro: false }); }).catch(() => msg('That image could not be read.'));
     return;
   }
   if (e.target.id !== 'jfile') return; const f = e.target.files[0]; if (!f) return;
@@ -1163,21 +1174,25 @@ drawer.addEventListener('change', e => {
 });
 let resetArm = 0;
 $('#resetBtn').onclick = e => {
-  if (!resetArm) { e.target.textContent = 'Click again to confirm'; resetArm = setTimeout(() => { resetArm = 0; e.target.textContent = 'Discard my edits'; }, 3000); return; }
-  clearTimeout(resetArm); resetArm = 0; e.target.textContent = 'Discard my edits';
-  data = normalize(clone(baseData)); SRC = baseHash === 'defaults' ? 'defaults' : 'file'; try { localStorage.removeItem(KEY); } catch (x) { } openPath = ''; renderDrawer(); render({ intro: false }); msg('Edits discarded.');
+  if (!resetArm) { e.target.textContent = 'Click again to confirm'; resetArm = setTimeout(() => { resetArm = 0; e.target.textContent = 'Discard edits for this person'; }, 3000); return; }
+  clearTimeout(resetArm); resetArm = 0; e.target.textContent = 'Discard edits for this person';
+  data[editPid] = clone(base[editPid].data); normalize(data); SRC[editPid] = base[editPid].hash === 'defaults' ? 'defaults' : 'file'; try { localStorage.removeItem(keyOf(editPid)); } catch (x) { } openPath = ''; renderDrawer(); render({ intro: false }); msg('Edits discarded.');
 };
 
 /* ============================ start ============================ */
-fetch('content.json', { cache: 'no-cache' })
-  .then(r => r.ok ? r.text() : Promise.reject())
-  .then(txt => { const j = JSON.parse(txt); data = normalize(j); baseData = clone(data); baseHash = djb(txt); SRC = 'file'; })
-  .catch(() => { })
-  .then(() => {
-    try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s && s.base === baseHash && s.data && s.data.a && s.data.b) { data = normalize(s.data); SRC = 'draft'; } } catch (e) { }
-    if (!location.hash) history.replaceState(null, '', '#a/about');
-    go(true);
-  });
+function loadPerson(id) {
+  return fetch(FILES[id], { cache: 'no-cache' })
+    .then(r => r.ok ? r.text() : Promise.reject())
+    .then(txt => { const j = JSON.parse(txt); data[id] = j; normalize(data); base[id] = { data: clone(data[id]), hash: djb(txt) }; SRC[id] = 'file'; })
+    .catch(() => { })          // falls back to the built-in sample for this person if their file is missing
+    .then(() => {
+      try { const s = JSON.parse(localStorage.getItem(keyOf(id)) || 'null'); if (s && s.base === base[id].hash && s.data) { data[id] = s.data; normalize(data); SRC[id] = 'draft'; } } catch (e) { }
+    });
+}
+Promise.all(IDS.map(loadPerson)).then(() => {
+  if (!location.hash) history.replaceState(null, '', '#a/about');
+  go(true);
+});
 </script>
 </body>
 </html>
