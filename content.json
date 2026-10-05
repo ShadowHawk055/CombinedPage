@@ -1,7 +1,7 @@
 {
   "a": {
     "name": "Dawnseeker",
-    "avatar": "DA",
+    "avatar": "DAWN",
     "accent": "#3d6bff",
     "location": "Laterano, Terra",
     "email": "maya@example.com",
@@ -92,7 +92,29 @@
         "link": "https://vizzy.io/project?id=OwKSRJGW4LQua7adLAtHk"
       }
     ],
-    "models": [],
+    "models": [
+      {
+        "title": "Composite Armaments - Cannon",
+        "description": "Cannon form of composite armaments",
+        "file": "models/hyperreal cannon.glb",
+        "shape": "knot",
+        "color": "#3d6bff"
+      },
+      {
+        "title": "Composite Armaments: Nuclear Meltdown - Case",
+        "description": "Case form of the Nuclear Meltdown composite armaments",
+        "file": "models/hyperreal case.glb",
+        "shape": "knot",
+        "color": "#3d6bff"
+      },
+      {
+        "title": "Composite Armaments: Nuclear Meltdown - SMG",
+        "description": "Case form of the Nuclear Meltdown composite armaments",
+        "file": "models/hyperreal gun.glb",
+        "shape": "knot",
+        "color": "#3d6bff"
+      }
+    ],
     "videos": [
       {
         "title": "Torrential Downpour",
@@ -122,7 +144,7 @@
   },
   "b": {
     "name": "Mahi | Reika",
-    "avatar": "DR",
+    "avatar": "M | R",
     "accent": "#f0457a",
     "location": "Jakarta",
     "email": "daniel@example.com",
@@ -238,9 +260,34 @@
       }
     ],
     "models": [
-      { "title": "Nuclear Meltdown - SMG", "description": "SMG form of the Nuclear Meltdown composite armaments", "file": "models/hyperreal gun.glb" },
-      { "title": "Nuclear Meltdown - Case", "description": "Case form of the Nuclear Meltdown composite armaments", "file": "models/hyperreal case.glb" },
-      { "title": "Composite Armaments - Cannon", "description": "Cannon form of composite armaments", "file": "models/hyperreal cannon.glb" }
+      {
+        "title": "Title glyph",
+        "description": "The knotted logo from Salt Road's opening title, modeled for the 3D title sequence.",
+        "shape": "knot",
+        "color": "#f0457a",
+        "file": ""
+      },
+      {
+        "title": "Set piece: arch",
+        "description": "The doorway built for the Harbor Lights studio sequence.",
+        "shape": "torus",
+        "color": "#f5b83d",
+        "file": ""
+      },
+      {
+        "title": "Lens study",
+        "description": "Reference sphere used to match CG light to the on-set grey ball.",
+        "shape": "sphere",
+        "color": "#8fb4ff",
+        "file": ""
+      },
+      {
+        "title": "Counterweight",
+        "description": "A crane counterweight, modeled to plan the rig for a boat shot.",
+        "shape": "cone",
+        "color": "#e9ecf3",
+        "file": ""
+      }
     ],
     "videos": [
       {
