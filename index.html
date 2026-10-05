@@ -378,6 +378,7 @@ function normalize(d) {
     ['name', 'avatar', 'location', 'email', 'tagline', 'bio'].forEach(k => { if (typeof p[k] !== 'string') p[k] = ''; });
     if (!/^#[0-9a-f]{6}$/i.test(p.accent || '')) p.accent = '#3d6bff';
     ['roles', 'stats', 'skills', 'experience', 'links', 'projects', 'models', 'videos'].forEach(k => { if (!Array.isArray(p[k])) p[k] = []; });
+    p.models.forEach(m => { if (typeof m.file !== 'string') m.file = ''; });
   }
   return d;
 }
@@ -385,12 +386,7 @@ function load() {
   try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s && s.a && s.b) return normalize(s); } catch (e) { }
   return normalize(clone(DEFAULTS));
 }
-let data = normalize(clone(DEFAULTS));
-fetch('content.json', { cache: 'no-cache' })
-  .then(r => r.ok ? r.json() : Promise.reject())
-  .then(j => { data = normalize(j); })
-  .catch(() => { })          // falls back to DEFAULTS if the file is missing
-  .finally(() => go(true));  // start the page after loading
+let data = load();
 const stripSession = (k, v) => Array.isArray(v) ? v.filter(x => !(x && x._session)) : v;
 let saveT;
 function save() { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(KEY, JSON.stringify(data, stripSession)); } catch (e) { } }, 200); }
@@ -691,16 +687,18 @@ function mount3D(p) {
     $('#mlist').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', +b.dataset.m === i));
     $('#minfo').innerHTML = `<h3>${esc(it.title)}</h3><p>${esc(it.description)}</p>`;
     const sw = $('#sw');
-    if (it._buffer) {
+    if (it._buffer || (it.file || '').trim()) {
       sw.innerHTML = '';
       if (!THREE.GLTFLoader) { $('#minfo').innerHTML += '<p>The .glb loader did not load.</p>'; return; }
-      new THREE.GLTFLoader().parse(it._buffer, '', gltf => {
+      const bad = () => { if (id === loadId) $('#minfo').innerHTML += '<p>That model file could not be loaded. Check the file path in the editor.</p>'; };
+      const getBuf = it._buffer ? Promise.resolve(it._buffer) : fetch(it.file.trim()).then(r => r.ok ? r.arrayBuffer() : Promise.reject());
+      getBuf.then(buf => new THREE.GLTFLoader().parse(buf, '', gltf => {
         if (id !== loadId) { disposeObj(gltf.scene); return; }
         const root = gltf.scene, box = new THREE.Box3().setFromObject(root), size = box.getSize(new THREE.Vector3()), ctr = box.getCenter(new THREE.Vector3());
         const s = 2.5 / (Math.max(size.x, size.y, size.z) || 1);
         root.scale.setScalar(s); root.position.copy(ctr).multiplyScalar(-s);
         model = new THREE.Group(); model.add(root); scene.add(model); applyWire();
-      }, () => { $('#minfo').innerHTML += '<p>That file could not be read. Try another .glb.</p>'; });
+      }, bad)).catch(bad);
     } else {
       const geo = (SHAPES[it.shape] || SHAPES.knot)();
       const mat = new THREE.MeshStandardMaterial({ color: new THREE.Color(it.color || p.accent), metalness: .3, roughness: .35, flatShading: it.shape === 'ico' || it.shape === 'octa' || it.shape === 'dodeca' });
@@ -736,9 +734,9 @@ function mount3D(p) {
 /* ============================ editor ============================ */
 const ENUMS = { shape: ['knot', 'torus', 'ico', 'sphere', 'cube', 'cone', 'octa', 'dodeca'], style: ['waves', 'orbits', 'grid'] };
 const LONG = new Set(['bio', 'description', 'text', 'tagline']);
-const LABELS = { roles: 'Rotating titles', avatar: 'Portrait text (1 to 2 letters)', accent: 'Accent color', tagline: 'Intro line', bio: 'About text', link: 'Link', src: 'Video file or link (blank = animated demo)', duration: 'Length in seconds', level: 'Level (0 to 100)', tags: 'Tags', shape: 'Shape', style: 'Demo style', projects: 'Projects (Work page)', models: '3D models (3D page)', videos: 'Videos (Videos page)', stats: 'Numbers (About page)', skills: 'Skills (About page)', experience: 'Experience (About page)', links: 'Social links (About page)', email: 'Email', location: 'Location', url: 'Link', org: 'Organization', period: 'When' };
+const LABELS = { roles: 'Rotating titles', avatar: 'Portrait text (1 to 2 letters)', accent: 'Accent color', tagline: 'Intro line', bio: 'About text', link: 'Link', src: 'Video file or link (blank = animated demo)', file: '3D file path (.glb), for example models/lamp.glb. Overrides Shape.', duration: 'Length in seconds', level: 'Level (0 to 100)', tags: 'Tags', shape: 'Shape', style: 'Demo style', projects: 'Projects (Work page)', models: '3D models (3D page)', videos: 'Videos (Videos page)', stats: 'Numbers (About page)', skills: 'Skills (About page)', experience: 'Experience (About page)', links: 'Social links (About page)', email: 'Email', location: 'Location', url: 'Link', org: 'Organization', period: 'When' };
 const lab = k => LABELS[k] || (k.charAt(0).toUpperCase() + k.slice(1));
-const TPL = { roles: '', tags: '', links: { label: '', url: 'https://' }, skills: { name: '', level: 70 }, stats: { value: '', label: '' }, experience: { period: '', title: '', org: '', text: '' }, projects: { title: 'New project', description: '', tags: [], link: '' }, models: { title: 'New model', description: '', shape: 'knot', color: '#3d6bff' }, videos: { title: 'New video', description: '', style: 'waves', color: '#f0457a', duration: 12, src: '' } };
+const TPL = { roles: '', tags: '', links: { label: '', url: 'https://' }, skills: { name: '', level: 70 }, stats: { value: '', label: '' }, experience: { period: '', title: '', org: '', text: '' }, projects: { title: 'New project', description: '', tags: [], link: '' }, models: { title: 'New model', description: '', file: 'models/your-model.glb', shape: 'knot', color: '#3d6bff' }, videos: { title: 'New video', description: '', style: 'waves', color: '#f0457a', duration: 12, src: '' } };
 const drawer = $('#drawer'), dbody = $('#dbody');
 let drawerOpen = false, tab = 'form', openPath = '';
 
