@@ -82,7 +82,7 @@
           "Visualizer"
         ],
         "link": "https://vizzy.io/project?id=mcVr2L1cvl82mHoW6z2sI",
-        "preview": "image/work/terminal.png"
+        "preview": "image/work/phoenix/terminal.png"
       },
       {
         "title": "3D Glass 2-In-1",
@@ -91,28 +91,28 @@
           "Visualizer"
         ],
         "link": "https://vizzy.io/project?id=OwKSRJGW4LQua7adLAtHk",
-        "preview": "image/work/3dglass.png"
+        "preview": "image/work/phoenix/3dglass.png"
       }
     ],
     "models": [
       {
         "title": "Composite Armaments - Cannon",
         "description": "Cannon form of composite armaments",
-        "file": "models/hyperreal cannon.glb",
+        "file": "models/phoenix/hyperreal cannon.glb",
         "shape": "knot",
         "color": "#3d6bff"
       },
       {
         "title": "Composite Armaments: Nuclear Meltdown - Case",
         "description": "Case form of the Nuclear Meltdown composite armaments",
-        "file": "models/hyperreal case.glb",
+        "file": "models/phoenix/hyperreal case.glb",
         "shape": "knot",
         "color": "#3d6bff"
       },
       {
         "title": "Composite Armaments: Nuclear Meltdown - SMG",
         "description": "Case form of the Nuclear Meltdown composite armaments",
-        "file": "models/hyperreal gun.glb",
+        "file": "models/phoenix/hyperreal gun.glb",
         "shape": "knot",
         "color": "#3d6bff"
       }
