@@ -74,6 +74,14 @@ h2{font:700 1.7rem/1.15 var(--display);letter-spacing:-.02em;margin-bottom:1rem}
 .cta{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.6rem}
 .portrait{width:clamp(110px,17vw,210px);aspect-ratio:3/4;border-radius:999px 999px 22px 22px;background:var(--accent);color:var(--on-accent);
   display:grid;place-items:center;font:800 clamp(2.4rem,6vw,4.6rem) var(--display);letter-spacing:-.04em;transition:background .6s}
+.portrait{overflow:hidden}
+.portrait img{width:100%;height:100%;object-fit:cover;display:block}
+.portrait[data-frame="arch"]{border-radius:999px 999px 22px 22px}
+.portrait[data-frame="circle"]{aspect-ratio:1;border-radius:50%}
+.portrait[data-frame="rounded"]{border-radius:30px}
+.portrait[data-frame="square"]{aspect-ratio:1;border-radius:4px}
+.portrait[data-frame="hexagon"]{aspect-ratio:1;border-radius:0;clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%)}
+.portrait[data-frame="blob"]{aspect-ratio:1;border-radius:62% 38% 46% 54%/55% 45% 55% 45%}
 .band{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(1.5rem,5vw,4rem);padding-block:clamp(2rem,5vw,3.5rem);border-top:1px solid var(--line)}
 .bio p{font-size:1.25rem;line-height:1.55;max-width:62ch}
 .stats{display:grid;gap:1.1rem}
@@ -105,10 +113,10 @@ h2{font:700 1.7rem/1.15 var(--display);letter-spacing:-.02em;margin-bottom:1rem}
 .row:last-child{border-bottom:1px solid var(--line)}
 .row::before{content:"";position:absolute;inset:0;background:color-mix(in srgb,var(--accent) 9%,transparent);transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
 @media (hover:hover){.row:hover::before{transform:scaleX(1)}.row:hover .t{transform:translateX(.6rem)}}
-.rh{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto 1.5rem;gap:1rem;align-items:center;width:100%;padding:1.3rem .5rem;background:none;border:0;text-align:left;cursor:pointer}
-.t{font:700 clamp(1.5rem,4vw,2.7rem)/1.05 var(--display);letter-spacing:-.025em;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.rh{position:relative;display:flex;gap:1rem;align-items:center;width:100%;padding:1.3rem .5rem;background:none;border:0;text-align:left;cursor:pointer}
+.t{flex:1;min-width:0;font:700 clamp(1.5rem,4vw,2.7rem)/1.05 var(--display);letter-spacing:-.025em;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
 .tg{color:var(--muted);font-size:.92rem;text-align:right}
-.pm{position:relative;width:1rem;height:1rem;transition:transform .35s}
+.pm{flex:none;position:relative;width:1rem;height:1rem;transition:transform .35s}
 .pm::before,.pm::after{content:"";position:absolute;background:currentColor;left:0;right:0;top:50%;height:2px;margin-top:-1px}
 .pm::after{transform:rotate(90deg)}
 .row.open .pm{transform:rotate(45deg)}
@@ -118,6 +126,44 @@ h2{font:700 1.7rem/1.15 var(--display);letter-spacing:-.02em;margin-bottom:1rem}
 .rb p{max-width:62ch;padding:0 .5rem;color:var(--muted);font-size:1.08rem}
 .rb a{display:inline-block;margin:.9rem .5rem 1.6rem;font-weight:600;text-decoration-color:var(--accent);text-decoration-thickness:2px;text-underline-offset:.3em}
 .rb p:last-child{padding-bottom:1.6rem}
+
+/* work previews */
+.rthumb{flex:none;width:6.2rem;height:3.6rem;border-radius:8px;overflow:hidden;background:#000;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.rthumb img,.rthumb video,.rthumb canvas,.pvw img,.pvw video,.pvw canvas{width:100%;height:100%;object-fit:cover;display:block}
+@media (hover:hover){.row:hover .rthumb{transform:scale(1.14) rotate(-2deg)}}
+.pvw{margin:0 .5rem 1.1rem;max-width:680px;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000}
+
+/* commissions */
+.status{display:inline-flex;align-items:center;gap:.55rem;margin:1.3rem 0 1.4rem;font-weight:600;font-size:.97rem}
+.status i{width:.6rem;height:.6rem;border-radius:50%;background:#2fc9a0;box-shadow:0 0 0 4px color-mix(in srgb,#2fc9a0 25%,transparent)}
+.status[data-s="limited"] i{background:#f5b83d;box-shadow:0 0 0 4px color-mix(in srgb,#f5b83d 25%,transparent)}
+.status[data-s="closed"] i{background:var(--muted);box-shadow:none}
+.opt{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) auto;gap:1.2rem 2.5rem;align-items:start;padding:1.8rem 0;border-top:1px solid var(--line)}
+.opt:last-child{border-bottom:1px solid var(--line)}
+.opt.feat{background:color-mix(in srgb,var(--accent) 8%,transparent);padding-inline:1.3rem;border-radius:14px;border-top-color:transparent}
+.opt h3{font:700 clamp(1.4rem,3vw,2rem)/1.1 var(--display);letter-spacing:-.02em;display:inline}
+.badge{margin-left:.7rem;padding:.15rem .65rem;border-radius:999px;background:var(--accent);color:var(--on-accent);font-size:.78rem;font-weight:600;vertical-align:.35em;white-space:nowrap}
+.opt p{color:var(--muted);margin-top:.5rem;max-width:46ch}
+.opt .o-time{font-size:.92rem;color:var(--text)}
+.o-list li{position:relative;padding-left:1.5rem;margin:.35rem 0;font-size:.97rem}
+.o-list li::before{content:"";position:absolute;left:0;top:.5em;width:.6rem;height:.32rem;border-left:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg)}
+.o-side{display:grid;gap:.8rem;justify-items:end;text-align:right}
+.price{font:800 clamp(1.5rem,3vw,2.2rem)/1.05 var(--display);letter-spacing:-.03em}
+.reqform{display:grid;gap:.5rem;max-width:560px}
+.reqform .f input[type=text],.reqform .f select,.reqform .f textarea{width:100%;padding:.6rem .75rem;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+
+/* code dialog, toast, goldfish */
+#codeDlg{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:1rem;background:rgba(6,9,18,.6)}
+.cbox{width:min(24rem,100%);background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:1.3rem}
+.cbox h2{font-size:1.25rem;margin-bottom:.3rem}
+.cbox p{color:var(--muted);font-size:.92rem;margin-bottom:.9rem}
+.cbox input{width:100%;padding:.65rem .8rem;border:1px solid var(--line);border-radius:10px;background:var(--bg);margin-bottom:.8rem}
+.crow{display:flex;gap:.5rem;flex-wrap:wrap}
+.cbox #codeMsg{min-height:1.2em;margin:.7rem 0 0;font-size:.88rem}
+.toast{position:fixed;left:50%;bottom:calc(1.5rem + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:90;background:var(--text);color:var(--bg);padding:.6rem 1.1rem;border-radius:999px;font-weight:600;font-size:.95rem;box-shadow:0 8px 30px rgba(0,0,0,.25);white-space:nowrap}
+.fish{position:fixed;left:0;bottom:22%;z-index:80;font-size:3.2rem;line-height:1;pointer-events:none}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.up{display:flex;gap:.5rem;align-items:center;margin:.1rem 0 .6rem}
 
 /* 3D */
 .m-wrap{display:grid;grid-template-columns:minmax(0,1fr) 20rem;gap:1.5rem;align-items:start;margin-top:1.6rem}
@@ -200,11 +246,13 @@ footer{max-width:1180px;margin:0 auto;padding:1.5rem clamp(1rem,4vw,2.5rem) 2.5r
 @media (max-width:820px){
   .nav{order:5;width:100%;overflow-x:auto}
   .hero{grid-template-columns:1fr}
-  .portrait{display:none}
+  .portrait{order:-1;width:104px;justify-self:start}
+  .opt{grid-template-columns:1fr}
+  .o-side{justify-items:start;text-align:left}
   .band{grid-template-columns:1fr}
   .m-wrap{grid-template-columns:1fr}
   .tg{display:none}
-  .rh{grid-template-columns:minmax(0,1fr) 1.5rem}
+  .rthumb{width:4.6rem;height:2.7rem}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
@@ -212,13 +260,14 @@ footer{max-width:1180px;margin:0 auto;padding:1.5rem clamp(1rem,4vw,2.5rem) 2.5r
 </style>
 </head>
 <body>
+<canvas id="bg" aria-hidden="true"></canvas>
 <header class="top">
   <a class="brand" id="brand" href="#a/about"><span class="mark" id="mark"></span><span id="brandName"></span></a>
   <nav class="nav" id="nav" aria-label="Pages"></nav>
   <div class="seg" id="seg" role="group" aria-label="Choose whose portfolio to view"><span class="thumb"></span><button type="button" data-p="a"></button><button type="button" data-p="b"></button></div>
   <div class="tools">
     <button class="icon" id="themeBtn" type="button" aria-label="Switch light or dark theme"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg></button>
-    <button class="icon" id="editBtn" type="button" aria-label="Edit page content" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button>
+    <button class="icon" id="codeBtn" type="button" aria-label="Enter a code"><svg viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l8-8M16 7l2.5 2.5M14 9l2 2"/></svg></button>
   </div>
 </header>
 
@@ -234,12 +283,23 @@ footer{max-width:1180px;margin:0 auto;padding:1.5rem clamp(1rem,4vw,2.5rem) 2.5r
   </div>
 </div>
 
+<div id="codeDlg" hidden role="dialog" aria-modal="true" aria-labelledby="codeTitle">
+  <div class="cbox">
+    <h2 id="codeTitle">Enter a code</h2>
+    <p>Codes unlock hidden features. You can also type a code anywhere on the page.</p>
+    <input id="codeIn" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Code">
+    <div class="crow"><button class="btn primary small" type="button" id="codeGo">Unlock</button><button class="btn small" type="button" id="codeClose">Cancel</button></div>
+    <p id="codeMsg" role="status"></p>
+  </div>
+</div>
+
 <aside class="drawer" id="drawer" inert aria-label="Content editor">
   <div class="dh"><h2>Edit content</h2><button class="btn small" type="button" id="dclose">Done</button></div>
+  <div class="tabs" id="ptabs"></div>
   <p class="dnote" id="dnote"></p>
   <div class="tabs"><button type="button" data-tab="form" aria-pressed="true">Fields</button><button type="button" data-tab="json" aria-pressed="false">Paste or export JSON</button></div>
   <div class="dbody" id="dbody"></div>
-  <div class="dfoot"><button type="button" class="mini" id="resetBtn">Reset to sample content</button><span id="msg" role="status"></span></div>
+  <div class="dfoot"><button type="button" class="mini" id="resetBtn">Discard my edits</button><span id="msg" role="status"></span></div>
 </aside>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
@@ -257,6 +317,15 @@ const DEFAULTS = {
   a: {
     name: "Maya Okafor",
     avatar: "MO",
+    photo: "",
+    frame: "arch",
+    commissionStatus: "open",
+    commissionIntro: "I take on a small number of commissions each season. Pick the option closest to what you need, then tell me about the project below.",
+    commissions: [
+      { title: "Concept sketches", price: "From $180", time: "About 3 days", description: "Three directions for a product idea, drawn by hand and scanned.", features: ["3 sketch directions", "1 round of revisions", "PDF delivery"], featured: "no" },
+      { title: "3D render pack", price: "From $450", time: "About 1 week", description: "Your product rendered in six studio angles, from your CAD file or a model I build.", features: ["6 high-resolution renders", "Transparent background versions", "2 rounds of revisions"], featured: "yes" },
+      { title: "Full product design", price: "From $2,400", time: "4 to 6 weeks", description: "From brief to prototype-ready files: research, form, CAD and a manufacturing handoff.", features: ["Research and brief", "Final CAD and drawings", "One printed prototype", "Manufacturer handoff"], featured: "no" }
+    ],
     accent: "#3d6bff",
     location: "Lagos and Berlin",
     email: "maya@example.com",
@@ -307,6 +376,16 @@ const DEFAULTS = {
   b: {
     name: "Daniel Reyes",
     avatar: "DR",
+    photo: "",
+    frame: "circle",
+    commissionStatus: "limited",
+    commissionIntro: "I have room for two projects this quarter. Short edits turn around fast; films need a conversation first.",
+    commissions: [
+      { title: "Social cut", price: "From $250", time: "About 3 days", description: "A vertical edit up to 60 seconds, cut and graded from your footage.", features: ["Up to 60 seconds", "Color grade included", "Captions and 2 aspect ratios"], featured: "no" },
+      { title: "Color grade", price: "From $90 per minute", time: "Depends on length", description: "A full grade for footage you shot, matched across every scene.", features: ["Shot matching", "One look, tuned with you", "Delivery in any codec"], featured: "no" },
+      { title: "Music video", price: "From $1,800", time: "About 3 weeks", description: "Concept, shoot and edit, with my crew or yours.", features: ["Concept treatment", "1 shoot day", "Edit and color grade", "2 rounds of revisions"], featured: "yes" },
+      { title: "Short film package", price: "From $6,000", time: "6 to 8 weeks", description: "A film from script to final grade, produced end to end.", features: ["Script development", "Up to 3 shoot days", "Edit, grade and sound mix", "Festival-ready masters"], featured: "no" }
+    ],
     accent: "#f0457a",
     location: "Jakarta",
     email: "daniel@example.com",
@@ -356,12 +435,31 @@ const DEFAULTS = {
   }
 };
 
+/* Sample project previews. Use "demo:waves", "demo:orbits" or "demo:grid" for an animated
+   placeholder, or a path such as "images/kora.jpg" or "videos/kora.mp4" for your own media. */
+['waves', 'orbits', 'grid', 'waves', 'orbits'].forEach((s, i) => { if (DEFAULTS.a.projects[i]) DEFAULTS.a.projects[i].preview = 'demo:' + s; });
+['orbits', 'grid', 'waves', 'grid'].forEach((s, i) => { if (DEFAULTS.b.projects[i]) DEFAULTS.b.projects[i].preview = 'demo:' + s; });
+
+/* =====================================================================
+   CODES  -  type a code anywhere on the page, or press the key button in the header.
+   Add your own by adding a line. The key (left side) is the code, in lowercase.
+   This only hides features from casual visitors. It is not real security,
+   because anyone can read the page source.
+   ===================================================================== */
+const CODES = {
+  editor:   { run: () => { setDrawer(true); toast('Editor unlocked'); } },
+  goldfish: { run: () => playGoldfish() }
+};
+/* Optional: path to your own audio file for the goldfish code, for example 'audio/goldfish.mp3'.
+   Leave blank to use the built-in bubble sound. */
+const GOLDFISH_AUDIO = '';
+
 /* ============================ helpers ============================ */
 const $ = (s, r = document) => r.querySelector(s);
 const view = $('#view');
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const KEY = 'portfolio-content-v1';
-const PAGES = [['about', 'About'], ['work', 'Work'], ['models', '3D models'], ['videos', 'Videos']];
+const PAGES = [['about', 'About'], ['work', 'Work'], ['models', '3D models'], ['videos', 'Videos'], ['commissions', 'Commissions']];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const clone = o => JSON.parse(JSON.stringify(o));
 const first = n => String(n || '').trim().split(/\s+/)[0] || '';
@@ -375,26 +473,35 @@ let cleanups = [];
 function normalize(d) {
   for (const id of ['a', 'b']) {
     const p = d[id] = d[id] || {};
-    ['name', 'avatar', 'location', 'email', 'tagline', 'bio'].forEach(k => { if (typeof p[k] !== 'string') p[k] = ''; });
+    ['name', 'avatar', 'photo', 'location', 'email', 'tagline', 'bio', 'commissionIntro'].forEach(k => { if (typeof p[k] !== 'string') p[k] = ''; });
+    if (!['arch', 'circle', 'rounded', 'square', 'hexagon', 'blob'].includes(p.frame)) p.frame = 'arch';
+    if (!['open', 'limited', 'closed'].includes(p.commissionStatus)) p.commissionStatus = 'open';
     if (!/^#[0-9a-f]{6}$/i.test(p.accent || '')) p.accent = '#3d6bff';
-    ['roles', 'stats', 'skills', 'experience', 'links', 'projects', 'models', 'videos'].forEach(k => { if (!Array.isArray(p[k])) p[k] = []; });
+    ['roles', 'stats', 'skills', 'experience', 'links', 'projects', 'models', 'videos', 'commissions'].forEach(k => { if (!Array.isArray(p[k])) p[k] = []; });
     p.models.forEach(m => { if (typeof m.file !== 'string') m.file = ''; });
+    p.projects.forEach(x => { if (typeof x.preview !== 'string') x.preview = ''; });
+    const bgo = p.background = (p.background && typeof p.background === 'object' && !Array.isArray(p.background)) ? p.background : {};
+    if (!['on', 'off'].includes(bgo.enabled)) bgo.enabled = 'on';
+    if (!/^#[0-9a-f]{6}$/i.test(bgo.dotColor || '')) bgo.dotColor = p.accent;
+    [['opacity', 22], ['speed', 30], ['density', 50], ['lines', 9]].forEach(([k, d]) => { bgo[k] = (bgo[k] === '' || bgo[k] === null || !Number.isFinite(+bgo[k])) ? d : +bgo[k]; });
+    p.commissions.forEach(o => { if (!Array.isArray(o.features)) o.features = []; if (o.featured !== 'yes') o.featured = 'no'; ['title', 'price', 'time', 'description'].forEach(k => { if (typeof o[k] !== 'string') o[k] = ''; }); });
   }
   return d;
 }
-function load() {
-  try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s && s.a && s.b) return normalize(s); } catch (e) { }
-  return normalize(clone(DEFAULTS));
-}
+const djb = s => { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return String(h >>> 0); };
+/* Content comes from content.json next to this page when it exists, otherwise from DEFAULTS above.
+   Edits made in the editor are kept as a draft in this browser, tied to the version of content.json
+   they were based on, so a newer content.json always wins over an old draft. */
 let data = normalize(clone(DEFAULTS));
 fetch('content.json', { cache: 'no-cache' })
   .then(r => r.ok ? r.json() : Promise.reject())
   .then(j => { data = normalize(j); })
   .catch(() => { })          // falls back to DEFAULTS if the file is missing
   .finally(() => go(true));  // start the page after loading
+const srcNote = () => SRC === 'file' ? 'Loaded from content.json.' : SRC === 'draft' ? 'Showing your unsaved edits from this browser.' : 'No content.json found, so the built-in sample content is used.';
 const stripSession = (k, v) => Array.isArray(v) ? v.filter(x => !(x && x._session)) : v;
 let saveT;
-function save() { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(KEY, JSON.stringify(data, stripSession)); } catch (e) { } }, 200); }
+function save() { SRC = 'draft'; clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(KEY, JSON.stringify({ base: baseHash, data }, stripSession)); } catch (e) { } }, 200); }
 const getAt = path => path.split('.').reduce((o, k) => o[k], data);
 function setAt(path, v) { const ks = path.split('.'), last = ks.pop(); ks.reduce((o, k) => o[k], data)[last] = v; }
 
@@ -403,7 +510,7 @@ let selModel = 0;
 
 /* ============================ routing ============================ */
 function parseHash() {
-  const m = location.hash.match(/^#([ab])\/(about|work|models|videos)/);
+  const m = location.hash.match(/^#([ab])\/(about|work|models|videos|commissions)/);
   return m ? { pid: m[1], page: m[2] } : { pid: cur.pid, page: cur.page };
 }
 function go(firstLoad) {
@@ -446,6 +553,7 @@ function render(opts = {}) {
   cleanups.forEach(f => { try { f(); } catch (e) { } }); cleanups = [];
   const p = data[cur.pid];
   renderChrome(p);
+  applyBg(p);
   view.classList.toggle('still', opts.intro === false);
   view.innerHTML = PAGE[cur.page](p);
   INIT[cur.page] && INIT[cur.page](p);
@@ -463,7 +571,7 @@ const PAGE = {
         <p class="lede">${esc(p.tagline)}</p>
         <div class="cta"><a class="btn primary" href="#${cur.pid}/work">See the work</a>${p.email ? `<a class="btn" href="mailto:${esc(p.email)}">Email ${esc(first(p.name))}</a>` : ''}</div>
       </div>
-      <div class="portrait" aria-hidden="true">${esc(p.avatar || initials(p.name))}</div>
+      ${portrait(p)}
     </section>
     <section class="band">
       <div class="bio"><h2>About</h2><p>${esc(p.bio)}</p>${p.location ? `<p class="sidenote">Based in ${esc(p.location)}</p>` : ''}</div>
@@ -480,9 +588,9 @@ const PAGE = {
     ${tags.length ? `<div class="chips" role="group" aria-label="Filter by tag"><button class="chip" type="button" data-chip="*" aria-pressed="true">All</button>${tags.map(t => `<button class="chip" type="button" data-chip="${esc(t)}" aria-pressed="false">${esc(t)}</button>`).join('')}</div>` : '<div style="height:1.5rem"></div>'}
     <div id="rows">${p.projects.map((x, i) => `
       <article class="row${i === 0 ? ' open' : ''}" data-tags="${esc((x.tags || []).join('|'))}">
-        <button class="rh" type="button" aria-expanded="${i === 0}"><span class="t">${esc(x.title)}</span><span class="tg">${esc((x.tags || []).join(', '))}</span><span class="pm" aria-hidden="true"></span></button>
-        <div class="rb"><div><p>${esc(x.description)}</p>${x.link ? `<a href="${esc(x.link)}" target="_blank" rel="noopener">Visit project</a>` : ''}</div></div>
-      </article>`).join('') || '<p class="empty">No projects yet. Open the editor with the pencil button and add one under Projects.</p>'}</div>`;
+        <button class="rh" type="button" aria-expanded="${i === 0}"><span class="t">${esc(x.title)}</span>${x.preview ? `<span class="rthumb">${media(x.preview, false)}</span>` : ''}<span class="tg">${esc((x.tags || []).join(', '))}</span><span class="pm" aria-hidden="true"></span></button>
+        <div class="rb"><div>${x.preview ? `<div class="pvw">${media(x.preview, true)}</div>` : ''}<p>${esc(x.description)}</p>${x.link ? `<a href="${esc(x.link)}" target="_blank" rel="noopener">Visit project</a>` : ''}</div></div>
+      </article>`).join('') || '<p class="empty">No projects yet. Open the editor (enter your editor code) and add one under Projects.</p>'}</div>`;
   },
   models(p) {
     return `
@@ -498,7 +606,7 @@ const PAGE = {
         <label class="btn small file">Preview your own .glb<input type="file" id="glb" accept=".glb"></label>
         <p class="sidenote">A loaded file stays on your device and is not saved.</p>
       </div>
-    </div>` : `<p class="empty">No 3D models yet. Open the editor with the pencil button and add one under 3D models page.</p>
+    </div>` : `<p class="empty">No 3D models yet. Open the editor (enter your editor code) and add one under 3D models.</p>
     <label class="btn small file">Preview a .glb file<input type="file" id="glb" accept=".glb"></label>`}`;
   },
   videos(p) {
@@ -509,7 +617,7 @@ const PAGE = {
         <div class="th">${(v.src || '').trim() && !embedUrl(v.src) ? `<video muted loop playsinline preload="metadata" src="${esc(v.src)}#t=0.5"></video>` : `<canvas width="640" height="360"></canvas>`}
           <span class="play"><svg viewBox="0 0 24 24"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="dur">${fmt(+v.duration || 12)}</span></div>
         <h3>${esc(v.title)}</h3><p>${esc(v.description)}</p>
-      </button>`).join('') || '<p class="empty">No videos yet. Open the editor with the pencil button and add one under Videos page.</p>'}</div>
+      </button>`).join('') || '<p class="empty">No videos yet. Open the editor (enter your editor code) and add one under Videos.</p>'}</div>
     <div style="margin-top:2rem"><label class="btn small file">Play a video from your device<input type="file" id="vfile" accept="video/*"></label><p class="sidenote">Tip: in the editor, paste a video link or file address into a video's source field to show your own video here.</p></div>`;
   }
 };
@@ -525,7 +633,7 @@ const INIT = {
     ['#stats', '#skills'].forEach(s => { const el = $(s); if (el) io.observe(el); });
     cleanups.push(() => io.disconnect());
   },
-  work() { },
+  work(p) { initWork(p); },
   models(p) { mount3D(p); wireGlb(p); },
   videos(p) { initVideos(p); const f = $('#vfile'); if (f) f.onchange = () => { const file = f.files[0]; if (!file) return; const it = { title: file.name.replace(/\.[^.]+$/, ''), description: 'Loaded from your device. It is not saved.', style: 'waves', color: p.accent, duration: 0, src: URL.createObjectURL(file), _session: true }; p.videos.push(it); render({ intro: false }); openVideo(it, null); }; }
 };
@@ -556,10 +664,216 @@ view.addEventListener('click', e => {
     return;
   }
   const rh = e.target.closest('.rh');
-  if (rh) { const row = rh.parentElement; const open = row.classList.toggle('open'); rh.setAttribute('aria-expanded', open); return; }
+  if (rh) {
+    const row = rh.parentElement; const open = row.classList.toggle('open'); rh.setAttribute('aria-expanded', open);
+    row.querySelectorAll('.pvw video').forEach(v => { if (open) v.play().catch(() => { }); else v.pause(); });
+    return;
+  }
   const vid = e.target.closest('.vid');
   if (vid) openVideo(data[cur.pid].videos[+vid.dataset.i], vid);
 });
+
+/* ============================ portraits, previews, commissions ============================ */
+function portrait(p) {
+  const img = (p.photo || '').trim();
+  return `<div class="portrait" data-frame="${esc(p.frame || 'arch')}" ${img ? `role="img" aria-label="${esc(p.name)}"` : 'aria-hidden="true"'}>${img ? `<img src="${esc(img)}" alt="">` : esc(p.avatar || initials(p.name))}</div>`;
+}
+const isVid = s => /^data:video|\.(mp4|webm|mov|m4v|ogv)([?#]|$)/i.test(s || '');
+function media(src, big) {
+  src = (src || '').trim(); if (!src) return '';
+  if (/^demo:/.test(src)) return `<canvas data-demo="${esc(src.slice(5))}" width="${big ? 960 : 320}" height="${big ? 540 : 180}"></canvas>`;
+  if (isVid(src)) return `<video ${big ? 'controls ' : ''}muted loop playsinline preload="metadata" src="${esc(src)}${big ? '' : '#t=0.5'}"></video>`;
+  return `<img src="${esc(src)}" alt="" loading="lazy">`;
+}
+function readImage(file, max) {
+  return new Promise((res, rej) => {
+    const fr = new FileReader(); fr.onerror = rej;
+    fr.onload = () => {
+      const img = new Image(); img.onerror = rej;
+      img.onload = () => {
+        const s = Math.min(1, max / Math.max(img.width, img.height));
+        const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(img.width * s)); c.height = Math.max(1, Math.round(img.height * s));
+        const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(img, 0, 0, c.width, c.height);
+        res(c.toDataURL('image/jpeg', .85));
+      };
+      img.src = fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+function initWork(p) {
+  view.querySelectorAll('.row').forEach(row => {
+    const cvs = [...row.querySelectorAll('canvas[data-demo]')], vids = [...row.querySelectorAll('video')];
+    let raf = 0, t0 = 0;
+    const draw = t => cvs.forEach(cv => drawReel(cv.getContext('2d'), cv.width, cv.height, t, { style: cv.dataset.demo, color: p.accent }));
+    const loop = n => { draw((n - t0) / 1000 + 1.8); raf = requestAnimationFrame(loop); };
+    draw(1.8);
+    row.addEventListener('pointerenter', () => { if (!reduced && cvs.length) { t0 = performance.now(); raf = requestAnimationFrame(loop); } vids.forEach(v => v.play().catch(() => { })); });
+    row.addEventListener('pointerleave', () => { cancelAnimationFrame(raf); draw(1.8); vids.forEach(v => { if (!row.classList.contains('open') || !v.closest('.pvw')) v.pause(); }); });
+    if (row.classList.contains('open')) row.querySelectorAll('.pvw video').forEach(v => v.play().catch(() => { }));
+    cleanups.push(() => cancelAnimationFrame(raf));
+  });
+}
+PAGE.commissions = p => {
+  const st = p.commissionStatus, label = { open: 'Open for commissions', limited: 'Limited availability', closed: 'Currently closed' }[st] || 'Open for commissions';
+  return `
+  <div class="page-h"><h2 style="margin:0;font-size:clamp(2.2rem,6vw,4rem)">Commissions</h2><p>${esc(p.commissionIntro)}</p></div>
+  <p class="status" data-s="${esc(st)}"><i></i>${label}</p>
+  <div id="opts">${p.commissions.map((o, i) => `
+    <article class="opt${o.featured === 'yes' ? ' feat' : ''}">
+      <div class="o-main"><h3>${esc(o.title)}</h3>${o.featured === 'yes' ? '<span class="badge">Most requested</span>' : ''}<p>${esc(o.description)}</p><p class="o-time">${esc(o.time)}</p></div>
+      <ul class="o-list">${(o.features || []).map(f => `<li>${esc(f)}</li>`).join('')}</ul>
+      <div class="o-side"><div class="price">${esc(o.price)}</div><button class="btn primary small" type="button" data-pick="${i}">${st === 'closed' ? 'Ask about the waitlist' : 'Request this'}</button></div>
+    </article>`).join('') || '<p class="empty">No commission options yet. Open the editor (enter your editor code) and add one under Commissions.</p>'}</div>
+  <section class="band" id="req" style="margin-top:2.5rem;grid-template-columns:1fr">
+    <div><h2>Start a request</h2>
+      <div class="reqform">
+        <label class="f"><span>Your name</span><input type="text" id="rq-name" autocomplete="name"></label>
+        <label class="f"><span>What are you interested in?</span><select id="rq-opt">${p.commissions.map(o => `<option>${esc(o.title)}</option>`).join('')}<option>Something custom</option></select></label>
+        <label class="f"><span>Tell ${esc(first(p.name))} about the project</span><textarea id="rq-msg" rows="5"></textarea></label>
+        <div><a class="btn primary" id="rq-send" href="#">Send by email</a></div>
+        <p class="sidenote">${p.email ? 'This opens your email app with the message filled in.' : 'Add an email address in the editor so this button can work.'}</p>
+      </div>
+    </div>
+  </section>`;
+};
+INIT.commissions = p => {
+  const sel = $('#rq-opt'), nm = $('#rq-name'), msgEl = $('#rq-msg'), send = $('#rq-send');
+  if (!sel) return;
+  const upd = () => {
+    const subject = 'Commission request: ' + sel.value;
+    const body = `Hi ${first(p.name)},\n\nMy name is ${nm.value.trim() || '(your name)'} and I would like to ask about: ${sel.value}.\n\n${msgEl.value.trim()}`;
+    send.href = p.email ? `mailto:${p.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}` : '#';
+  };
+  [sel, nm, msgEl].forEach(el => el.addEventListener('input', upd)); sel.addEventListener('change', upd); upd();
+  view.querySelectorAll('[data-pick]').forEach(b => b.addEventListener('click', () => {
+    const o = p.commissions[+b.dataset.pick]; if (!o) return;
+    sel.value = o.title; upd();
+    $('#req').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
+    setTimeout(() => msgEl.focus({ preventScroll: true }), reduced ? 0 : 450);
+  }));
+};
+
+/* ============================ codes, toast, goldfish ============================ */
+function toast(t) {
+  const el = document.createElement('div'); el.className = 'toast'; el.setAttribute('role', 'status'); el.textContent = t;
+  document.body.append(el); setTimeout(() => el.remove(), 2800);
+}
+const codeDlg = $('#codeDlg'), codeIn = $('#codeIn'), codeMsg = $('#codeMsg');
+function openCode() { codeDlg.hidden = false; codeIn.value = ''; codeMsg.textContent = ''; codeIn.focus(); }
+function closeCode(refocus = true) { codeDlg.hidden = true; if (refocus) $('#codeBtn').focus(); }
+function submitCode() {
+  const k = codeIn.value.trim().toLowerCase();
+  if (k && Object.hasOwn(CODES, k)) { closeCode(false); CODES[k].run(); }
+  else { codeMsg.textContent = 'That code did not match anything.'; codeIn.select(); }
+}
+codeIn.addEventListener('keydown', e => { if (e.key === 'Enter') submitCode(); });
+$('#codeGo').onclick = submitCode;
+$('#codeClose').onclick = () => closeCode();
+codeDlg.addEventListener('click', e => { if (e.target === codeDlg) closeCode(); });
+let typed = '';
+addEventListener('keydown', e => {
+  if (e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1) return;
+  const t = e.target; if (t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable)) return;
+  typed = (typed + e.key.toLowerCase()).slice(-32);
+  for (const k of Object.keys(CODES)) if (typed.endsWith(k)) { typed = ''; CODES[k].run(); break; }
+});
+let actx;
+function bubbles() {
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)(); if (actx.state === 'suspended') actx.resume();
+    const t0 = actx.currentTime;
+    for (let i = 0; i < 10; i++) {
+      const o = actx.createOscillator(), g = actx.createGain(), t = t0 + i * .21 + Math.random() * .07, f = 380 + Math.random() * 520;
+      o.type = 'sine'; o.frequency.setValueAtTime(f, t); o.frequency.exponentialRampToValueAtTime(f * 2.1, t + .09);
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.18, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + .14);
+      o.connect(g); g.connect(actx.destination); o.start(t); o.stop(t + .16);
+    }
+  } catch (e) { }
+}
+function playGoldfish() {
+  const f = document.createElement('div'); f.className = 'fish'; f.textContent = '\u{1F420}'; f.setAttribute('aria-hidden', 'true'); document.body.append(f);
+  if (reduced) setTimeout(() => f.remove(), 2500);
+  else f.animate([{ transform: 'translate(112vw,0)' }, { transform: 'translate(72vw,-45px)' }, { transform: 'translate(36vw,12px)' }, { transform: 'translate(-15vw,-30px)' }], { duration: 5200, easing: 'linear' }).onfinish = () => f.remove();
+  const src = (GOLDFISH_AUDIO || '').trim();
+  if (src) { const a = new Audio(src); a.play().catch(bubbles); } else bubbles();
+  toast('Goldfish! Blub blub.');
+}
+
+/* ============================ animated background ============================ */
+/* Halftone topographic map: a drifting noise field is sampled on a staggered dot grid,
+   and dots swell where the field crosses an evenly spaced "elevation" level, which draws
+   dotted contour lines. Settings come from each person's "background" in the content. */
+const BG = { cv: $('#bg'), ctx: null, w: 0, h: 0, dpr: 1, t: 3, raf: 0, last: 0, cur: null, tgt: null };
+BG.ctx = BG.cv.getContext('2d');
+const BG_PERM = new Uint8Array(512);
+(function () {
+  const p = Array.from({ length: 256 }, (_, i) => i); let s = 1337;
+  for (let i = 255; i > 0; i--) { s = (s * 16807) % 2147483647; const j = s % (i + 1); [p[i], p[j]] = [p[j], p[i]]; }
+  for (let i = 0; i < 512; i++) BG_PERM[i] = p[i & 255];
+})();
+const bgSmooth = t => t * t * (3 - 2 * t);
+const bgLat = (a, b, c) => BG_PERM[BG_PERM[BG_PERM[a & 255] + (b & 255)] + (c & 255)] / 255;
+function bgNoise(x, y, z) {
+  const xi = Math.floor(x), yi = Math.floor(y), zi = Math.floor(z);
+  const u = bgSmooth(x - xi), v = bgSmooth(y - yi), w = bgSmooth(z - zi);
+  const a = bgLat(xi, yi, zi), b = bgLat(xi + 1, yi, zi), c = bgLat(xi, yi + 1, zi), d = bgLat(xi + 1, yi + 1, zi);
+  const e = bgLat(xi, yi, zi + 1), f = bgLat(xi + 1, yi, zi + 1), g = bgLat(xi, yi + 1, zi + 1), h = bgLat(xi + 1, yi + 1, zi + 1);
+  const x1 = a + (b - a) * u, x2 = c + (d - c) * u, x3 = e + (f - e) * u, x4 = g + (h - g) * u;
+  const y1 = x1 + (x2 - x1) * v, y2 = x3 + (x4 - x3) * v;
+  return y1 + (y2 - y1) * w;
+}
+const BG_COS = Math.cos(.9), BG_SIN = Math.sin(.9);
+function bgField(x, y, t) {
+  const n1 = bgNoise(x, y, t);
+  const n2 = bgNoise((x * BG_COS - y * BG_SIN) * 2.3 + 11.7, (x * BG_SIN + y * BG_COS) * 2.3 + 4.2, t * 1.4 + 9);
+  return n1 * .68 + n2 * .32;
+}
+const bgClamp = (v, a, b) => Math.min(b, Math.max(a, v));
+function bgSize() {
+  BG.dpr = Math.min(devicePixelRatio || 1, 1.5); BG.w = innerWidth; BG.h = innerHeight;
+  BG.cv.width = Math.round(BG.w * BG.dpr); BG.cv.height = Math.round(BG.h * BG.dpr);
+}
+function drawBg() {
+  const { ctx, w, h, dpr } = BG, C = BG.cur;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
+  if (!C || C.a < .002) return;
+  let sp = 26 - 17 * C.density / 100; sp = Math.max(sp, Math.sqrt(w * h / 11000));
+  const cols = Math.ceil(w / sp) + 1, rows = Math.ceil(h / sp) + 1, sc = 1 / 340, t = BG.t, L = C.lines;
+  const rMax = sp * .42, rMin = sp * .045;
+  ctx.fillStyle = `rgb(${C.r | 0},${C.g | 0},${C.b | 0})`; ctx.globalAlpha = C.a;
+  ctx.beginPath();
+  for (let j = 0; j < rows; j++) {
+    const y = j * sp, off = (j & 1) ? sp * .5 : 0;
+    for (let i = 0; i < cols; i++) {
+      const x = i * sp + off;
+      let lv = ((bgField(x * sc, y * sc, t) - .5) * 2 + .5) * L; lv -= Math.floor(lv);
+      const d = Math.min(lv, 1 - lv); let k = 1 - d / .17; k = k < 0 ? 0 : k; k = k * k * (3 - 2 * k);
+      const r = rMin + (rMax - rMin) * k;
+      ctx.moveTo(x + r, y); ctx.arc(x, y, r, 0, 6.2832);
+    }
+  }
+  ctx.fill(); ctx.globalAlpha = 1;
+}
+function bgFrame(now) {
+  const T = BG.tgt, C = BG.cur, dt = Math.min(.1, (now - BG.last) / 1000); BG.last = now;
+  const k = reduced ? 1 : 1 - Math.exp(-dt * 5), ta = T.on ? T.a : 0;
+  C.r += (T.r - C.r) * k; C.g += (T.g - C.g) * k; C.b += (T.b - C.b) * k; C.a += (ta - C.a) * k;
+  C.density = T.density; C.lines = T.lines;
+  const moving = T.on && T.speed > 0 && !reduced;
+  if (moving) BG.t += dt * T.speed / 100 * .5;
+  drawBg();
+  const settling = Math.abs(C.a - ta) > .003 || Math.abs(C.r - T.r) > .8 || Math.abs(C.g - T.g) > .8 || Math.abs(C.b - T.b) > .8;
+  if (moving || settling) BG.raf = requestAnimationFrame(bgFrame);
+}
+function applyBg(p) {
+  const b = p.background || {}, [r, g, bl] = hexRgb(b.dotColor || p.accent);
+  BG.tgt = { on: b.enabled !== 'off', r, g, b: bl, a: bgClamp((+b.opacity || 0) / 100, 0, 1), speed: bgClamp(+b.speed || 0, 0, 100), density: bgClamp(+b.density || 0, 0, 100), lines: bgClamp(Math.round(+b.lines || 9), 3, 24) };
+  if (!BG.cur) BG.cur = { r, g, b: bl, a: 0, density: BG.tgt.density, lines: BG.tgt.lines };
+  cancelAnimationFrame(BG.raf); BG.last = performance.now(); BG.raf = requestAnimationFrame(bgFrame);
+}
+bgSize();
+let bgResizeT; addEventListener('resize', () => { clearTimeout(bgResizeT); bgResizeT = setTimeout(() => { bgSize(); if (BG.tgt) { cancelAnimationFrame(BG.raf); BG.last = performance.now(); BG.raf = requestAnimationFrame(bgFrame); } }, 120); });
 
 /* ============================ video ============================ */
 function embedUrl(u) {
@@ -737,22 +1051,26 @@ function mount3D(p) {
 })();
 
 /* ============================ editor ============================ */
-const ENUMS = { shape: ['knot', 'torus', 'ico', 'sphere', 'cube', 'cone', 'octa', 'dodeca'], style: ['waves', 'orbits', 'grid'] };
-const LONG = new Set(['bio', 'description', 'text', 'tagline']);
-const LABELS = { roles: 'Rotating titles', avatar: 'Portrait text (1 to 2 letters)', accent: 'Accent color', tagline: 'Intro line', bio: 'About text', link: 'Link', src: 'Video file or link (blank = animated demo)', file: '3D file path (.glb), for example models/lamp.glb. Overrides Shape.', duration: 'Length in seconds', level: 'Level (0 to 100)', tags: 'Tags', shape: 'Shape', style: 'Demo style', projects: 'Projects (Work page)', models: '3D models (3D page)', videos: 'Videos (Videos page)', stats: 'Numbers (About page)', skills: 'Skills (About page)', experience: 'Experience (About page)', links: 'Social links (About page)', email: 'Email', location: 'Location', url: 'Link', org: 'Organization', period: 'When' };
+const ENUMS = { shape: ['knot', 'torus', 'ico', 'sphere', 'cube', 'cone', 'octa', 'dodeca'], style: ['waves', 'orbits', 'grid'], frame: ['arch', 'circle', 'rounded', 'square', 'hexagon', 'blob'], commissionStatus: ['open', 'limited', 'closed'], featured: ['no', 'yes'], enabled: ['on', 'off'] };
+const RANGE = { level: [0, 100], opacity: [0, 100], speed: [0, 100], density: [0, 100], lines: [3, 24] };
+const LONG = new Set(['bio', 'description', 'text', 'tagline', 'commissionIntro']);
+const LABELS = { roles: 'Rotating titles', avatar: 'Portrait text (1 to 2 letters)', accent: 'Accent color', tagline: 'Intro line', bio: 'About text', link: 'Link', src: 'Video file or link (blank = animated demo)', file: '3D file path (.glb), for example models/lamp.glb. Overrides Shape.', duration: 'Length in seconds', level: 'Level (0 to 100)', tags: 'Tags', shape: 'Shape', style: 'Demo style', projects: 'Projects (Work page)', models: '3D models (3D page)', videos: 'Videos (Videos page)', stats: 'Numbers (About page)', skills: 'Skills (About page)', experience: 'Experience (About page)', links: 'Social links (About page)', email: 'Email', location: 'Location', url: 'Link', org: 'Organization', period: 'When', photo: 'Photo: file path or address (or upload below)', frame: 'Photo frame shape', preview: 'Preview image or video: path, address or upload. Use demo:waves, demo:orbits or demo:grid for an animated placeholder.', commissionIntro: 'Commissions intro text', commissionStatus: 'Availability', commissions: 'Commission options (Commissions page)', price: 'Price', time: 'Turnaround', features: 'What is included', featured: 'Highlight as most requested?', enabled: 'Show animated background', dotColor: 'Dot color', opacity: 'Opacity (0 = invisible, 100 = solid)', speed: 'Animation speed (0 = still)', density: 'Dot density (0 to 100)', lines: 'Number of contour lines (3 to 24)' };
 const lab = k => LABELS[k] || (k.charAt(0).toUpperCase() + k.slice(1));
-const TPL = { roles: '', tags: '', links: { label: '', url: 'https://' }, skills: { name: '', level: 70 }, stats: { value: '', label: '' }, experience: { period: '', title: '', org: '', text: '' }, projects: { title: 'New project', description: '', tags: [], link: '' }, models: { title: 'New model', description: '', file: 'models/your-model.glb', shape: 'knot', color: '#3d6bff' }, videos: { title: 'New video', description: '', style: 'waves', color: '#f0457a', duration: 12, src: '' } };
+const TPL = { roles: '', tags: '', features: '', commissions: { title: 'New option', price: 'From $100', time: '1 week', description: '', features: [''], featured: 'no' }, links: { label: '', url: 'https://' }, skills: { name: '', level: 70 }, stats: { value: '', label: '' }, experience: { period: '', title: '', org: '', text: '' }, projects: { title: 'New project', description: '', preview: '', tags: [], link: '' }, models: { title: 'New model', description: '', file: 'models/your-model.glb', shape: 'knot', color: '#3d6bff' }, videos: { title: 'New video', description: '', style: 'waves', color: '#f0457a', duration: 12, src: '' } };
 const drawer = $('#drawer'), dbody = $('#dbody');
-let drawerOpen = false, tab = 'form', openPath = '';
+let drawerOpen = false, tab = 'form', openPath = '', editPid = 'a';
 
 function field(v, path, key, showLabel = true) {
   const P = `data-path="${esc(path)}"`; let c;
-  if (ENUMS[key]) c = `<select ${P}>${ENUMS[key].map(o => `<option${o === v ? ' selected' : ''}>${o}</option>`).join('')}</select>`;
-  else if (typeof v === 'number') c = `<input type="number" ${P} data-num value="${v}" ${key === 'level' ? 'min="0" max="100"' : ''}>`;
-  else if ((key === 'color' || key === 'accent') && /^#[0-9a-f]{6}$/i.test(v)) c = `<input type="color" ${P} value="${v}">`;
+  const isData = (key === 'photo' || key === 'preview') && /^data:/.test(v || '');
+  if (isData) c = '<p class="sidenote" style="margin:.2rem 0">An uploaded image is set.</p>';
+  else if (ENUMS[key]) c = `<select ${P}>${ENUMS[key].map(o => `<option${o === v ? ' selected' : ''}>${o}</option>`).join('')}</select>`;
+  else if (typeof v === 'number') c = `<input type="number" ${P} data-num value="${v}" ${RANGE[key] ? `min="${RANGE[key][0]}" max="${RANGE[key][1]}"` : ''}>`;
+  else if ((key === 'color' || key === 'accent' || key === 'dotColor') && /^#[0-9a-f]{6}$/i.test(v)) c = `<input type="color" ${P} value="${v}">`;
   else if (LONG.has(key)) c = `<textarea rows="3" ${P}>${esc(v)}</textarea>`;
   else c = `<input type="text" ${P} value="${esc(v)}">`;
-  return `<label class="f">${showLabel ? `<span>${esc(lab(key))}</span>` : ''}${c}</label>`;
+  const up = (key === 'photo' || key === 'preview') ? `<div class="up"><label class="mini file">Upload image<input type="file" accept="image/*" data-upload="${esc(path)}" data-max="${key === 'photo' ? 640 : 1100}"></label>${/^data:/.test(v || '') ? `<button type="button" class="mini" data-act="clear" data-path="${esc(path)}">Remove</button>` : ''}</div>` : '';
+  return `<label class="f">${showLabel ? `<span>${esc(lab(key))}</span>` : ''}${c}</label>${up}`;
 }
 function node(v, path, key) {
   if (Array.isArray(v)) {
@@ -769,25 +1087,28 @@ function node(v, path, key) {
 }
 function formHTML(pid) {
   const p = data[pid];
-  const scal = ['name', 'avatar', 'accent', 'location', 'email', 'tagline', 'bio'];
+  const scal = ['name', 'avatar', 'photo', 'frame', 'accent', 'location', 'email', 'tagline', 'bio'];
   let html = `<details class="grp" open><summary>Profile</summary>${scal.map(k => node(p[k], pid + '.' + k, k)).join('')}<div class="sub">${lab('roles')}</div>${node(p.roles, pid + '.roles', 'roles')}</details>`;
-  html += ['stats', 'skills', 'experience', 'links', 'projects', 'models', 'videos'].map(g => `<details class="grp"${openPath.startsWith(pid + '.' + g + '.') ? ' open' : ''}><summary>${esc(lab(g))}<small>${p[g].length}</small></summary>${node(p[g], pid + '.' + g, g)}</details>`).join('');
+  html += `<details class="grp"><summary>Animated background</summary>${['enabled', 'dotColor', 'opacity', 'speed', 'density', 'lines'].map(k => field(p.background[k], pid + '.background.' + k, k)).join('')}<p class="sidenote">Drifting dotted contour lines behind the page. Each person has their own.</p></details>`;
+  html += ['stats', 'skills', 'experience', 'links', 'projects', 'models', 'videos', 'commissions'].map(g => `<details class="grp"${openPath.startsWith(pid + '.' + g + '.') ? ' open' : ''}><summary>${esc(lab(g))}<small>${p[g].length}</small></summary>${g === 'commissions' ? node(p.commissionStatus, pid + '.commissionStatus', 'commissionStatus') + node(p.commissionIntro, pid + '.commissionIntro', 'commissionIntro') : ''}${node(p[g], pid + '.' + g, g)}</details>`).join('');
   return html;
 }
-function renderDrawerNote() { $('#dnote').textContent = `Editing ${data[cur.pid].name || 'this person'}. Use the switch at the top to edit the other person. Changes appear instantly and are saved in this browser.`; }
+function renderDrawerNote() { $('#dnote').textContent = tab === 'form' ? `Editing ${data[editPid].name || 'this person'}. Changes are saved in this browser. Use the switch at the top of the page to preview the other person.` : ''; }
 function renderDrawer() {
   renderDrawerNote();
+  const pt = $('#ptabs'); pt.hidden = tab !== 'form';
+  pt.innerHTML = ['a', 'b'].map(id => `<button type="button" data-ep="${id}" aria-pressed="${id === editPid}">${esc(first(data[id].name) || 'Person')}</button>`).join('');
   drawer.querySelectorAll('[data-tab]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tab === tab));
-  if (tab === 'form') dbody.innerHTML = formHTML(cur.pid);
-  else dbody.innerHTML = `<p class="sidenote" style="margin:0 0 .6rem">This is all the content for both people. Copy it to keep a backup, or paste new content and apply it.</p><textarea id="json" spellcheck="false">${esc(JSON.stringify(data, stripSession, 2))}</textarea><div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.6rem"><button type="button" class="mini" id="applyJson">Apply</button><button type="button" class="mini" id="copyJson">Copy</button><label class="mini file" style="position:relative">Load .json file<input type="file" id="jfile" accept=".json,application/json"></label></div>`;
+  if (tab === 'form') dbody.innerHTML = formHTML(editPid);
+  else dbody.innerHTML = `<p class="sidenote" style="margin:0 0 .6rem">${esc(srcNote())} This is all the content for both people, including the background settings. To make your edits permanent, download content.json (or copy this text into it) and put it next to index.html in your repo.</p><textarea id="json" spellcheck="false">${esc(JSON.stringify(data, stripSession, 2))}</textarea><div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.6rem"><button type="button" class="mini" id="applyJson">Apply</button><button type="button" class="mini" id="dlJson">Download content.json</button><button type="button" class="mini" id="copyJson">Copy</button><label class="mini file" style="position:relative">Load .json file<input type="file" id="jfile" accept=".json,application/json"></label></div>`;
 }
 function setDrawer(open) {
-  drawerOpen = open; document.body.classList.toggle('editing', open); drawer.inert = !open; $('#editBtn').setAttribute('aria-expanded', open);
-  if (open) { renderDrawer(); $('#dclose').focus(); } else $('#editBtn').focus();
+  drawerOpen = open; document.body.classList.toggle('editing', open); drawer.inert = !open;
+  if (open) { editPid = cur.pid; renderDrawer(); $('#dclose').focus(); } else $('#codeBtn').focus();
 }
-$('#editBtn').onclick = () => setDrawer(!drawerOpen);
+$('#codeBtn').onclick = openCode;
 $('#dclose').onclick = () => setDrawer(false);
-addEventListener('keydown', e => { if (e.key === 'Escape') { if (!modal.hidden) closeVideo(); else if (drawerOpen) setDrawer(false); } });
+addEventListener('keydown', e => { if (e.key === 'Escape') { if (!codeDlg.hidden) closeCode(); else if (!modal.hidden) closeVideo(); else if (drawerOpen) setDrawer(false); } });
 
 let rT; const schedRender = () => { clearTimeout(rT); rT = setTimeout(() => render({ intro: false }), 300); };
 const msg = t => { $('#msg').textContent = t; clearTimeout(msg.t); msg.t = setTimeout(() => $('#msg').textContent = '', 3500); };
@@ -798,6 +1119,7 @@ drawer.addEventListener('input', e => {
 });
 drawer.addEventListener('click', e => {
   const tb = e.target.closest('[data-tab]'); if (tb) { tab = tb.dataset.tab; renderDrawer(); return; }
+  const ep = e.target.closest('[data-ep]'); if (ep) { editPid = ep.dataset.ep; openPath = ''; renderDrawer(); return; }
   const b = e.target.closest('[data-act]');
   if (b) {
     const path = b.dataset.path;
@@ -805,6 +1127,8 @@ drawer.addEventListener('click', e => {
       const arr = getAt(path), tpl = TPL[path.split('.').pop()];
       arr.push(tpl && typeof tpl === 'object' ? clone(tpl) : (tpl ?? ''));
       openPath = path + '.' + (arr.length - 1);
+    } else if (b.dataset.act === 'clear') {
+      setAt(path, '');
     } else {
       const i = path.lastIndexOf('.'); getAt(path.slice(0, i)).splice(+path.slice(i + 1), 1); openPath = '';
     }
@@ -814,25 +1138,44 @@ drawer.addEventListener('click', e => {
     try { const obj = JSON.parse($('#json').value); if (!obj.a || !obj.b) throw new Error('Needs both "a" and "b"'); data = normalize(obj); save(); renderDrawer(); render({ intro: false }); msg('Applied.'); }
     catch (err) { msg('Could not apply: ' + err.message); }
   }
+  if (e.target.id === 'dlJson') {
+    try {
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(data, stripSession, 2)], { type: 'application/json' })); a.download = 'content.json';
+      document.body.append(a); a.click(); a.remove(); msg('Downloaded. Put it next to index.html and push it to GitHub.');
+    } catch (err) { msg('Download did not work here. Use Copy instead.'); }
+  }
   if (e.target.id === 'copyJson') {
     const ta = $('#json'); ta.select();
     (navigator.clipboard ? navigator.clipboard.writeText(ta.value) : Promise.reject()).then(() => msg('Copied.'), () => { try { document.execCommand('copy'); msg('Copied.'); } catch (x) { msg('Press Ctrl+C to copy the selected text.'); } });
   }
 });
 drawer.addEventListener('change', e => {
+  const up = e.target.dataset && e.target.dataset.upload;
+  if (up) {
+    const uf = e.target.files[0];
+    if (uf) readImage(uf, +e.target.dataset.max || 800).then(url => { setAt(up, url); save(); renderDrawer(); render({ intro: false }); }).catch(() => msg('That image could not be read.'));
+    return;
+  }
   if (e.target.id !== 'jfile') return; const f = e.target.files[0]; if (!f) return;
   f.text().then(t => { $('#json').value = t; msg('File loaded. Press Apply to use it.'); });
 });
 let resetArm = 0;
 $('#resetBtn').onclick = e => {
-  if (!resetArm) { e.target.textContent = 'Click again to confirm'; resetArm = setTimeout(() => { resetArm = 0; e.target.textContent = 'Reset to sample content'; }, 3000); return; }
-  clearTimeout(resetArm); resetArm = 0; e.target.textContent = 'Reset to sample content';
-  data = normalize(clone(DEFAULTS)); try { localStorage.removeItem(KEY); } catch (x) { } openPath = ''; renderDrawer(); render({ intro: false }); msg('Sample content restored.');
+  if (!resetArm) { e.target.textContent = 'Click again to confirm'; resetArm = setTimeout(() => { resetArm = 0; e.target.textContent = 'Discard my edits'; }, 3000); return; }
+  clearTimeout(resetArm); resetArm = 0; e.target.textContent = 'Discard my edits';
+  data = normalize(clone(baseData)); SRC = baseHash === 'defaults' ? 'defaults' : 'file'; try { localStorage.removeItem(KEY); } catch (x) { } openPath = ''; renderDrawer(); render({ intro: false }); msg('Edits discarded.');
 };
 
 /* ============================ start ============================ */
-if (!location.hash) history.replaceState(null, '', '#a/about');
-go(true);
+fetch('content.json', { cache: 'no-cache' })
+  .then(r => r.ok ? r.text() : Promise.reject())
+  .then(txt => { const j = JSON.parse(txt); data = normalize(j); baseData = clone(data); baseHash = djb(txt); SRC = 'file'; })
+  .catch(() => { })
+  .then(() => {
+    try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s && s.base === baseHash && s.data && s.data.a && s.data.b) { data = normalize(s.data); SRC = 'draft'; } } catch (e) { }
+    if (!location.hash) history.replaceState(null, '', '#a/about');
+    go(true);
+  });
 </script>
 </body>
 </html>
