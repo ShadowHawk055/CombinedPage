@@ -143,86 +143,53 @@
     ]
   },
   "b": {
-    "name": "Mahi | Reika",
-    "avatar": "M | R",
+    "name": "Reika",
+    "avatar": "MR",
     "accent": "#f0457a",
-    "location": "Jakarta",
+    "location": "Kathmandu",
     "email": "daniel@example.com",
     "roles": [
-      "Film director",
-      "Colorist",
-      "Motion designer"
+      "Visual Artist"
     ],
-    "tagline": "I make short films and music videos about cities at night, and I grade every frame myself.",
+    "tagline": "I make videos.",
     "bio": "I run Reyes Picture Co., a three-person studio. My films have played at festivals in Busan, Rotterdam and Singapore. I direct, shoot and colorgrade, which keeps the look consistent from the first test to the final export.",
     "stats": [
       {
-        "value": "14",
-        "label": "short films"
+        "value": "8",
+        "label": "Vizzy Projects"
       },
       {
-        "value": "6",
-        "label": "festival selections"
+        "value": "5",
+        "label": "Vizzy Featured Projects"
       },
       {
-        "value": "50+",
-        "label": "music videos"
+        "value": "5",
+        "label": "Years of Experience"
       }
     ],
     "skills": [
       {
-        "name": "Directing",
+        "name": "Vizzy",
         "level": 94
       },
       {
-        "name": "Color grading",
+        "name": "Canva",
         "level": 88
       },
       {
-        "name": "Cinematography",
+        "name": "Paint.Net",
         "level": 82
       },
       {
-        "name": "Motion graphics",
+        "name": "Blockbench",
         "level": 76
-      },
-      {
-        "name": "Sound design",
-        "level": 64
       }
     ],
-    "experience": [
-      {
-        "period": "2021 to now",
-        "title": "Director and founder",
-        "org": "Reyes Picture Co.",
-        "text": "Short films, documentaries and music videos for independent labels and brands."
-      },
-      {
-        "period": "2017 to 2021",
-        "title": "Editor and colorist",
-        "org": "Lantern Films",
-        "text": "Cut and graded over 120 commercial and branded pieces."
-      },
-      {
-        "period": "2013 to 2017",
-        "title": "Film studies",
-        "org": "Jakarta Arts Institute",
-        "text": "Directing major with a focus on night photography."
-      }
-    ],
+    "experience": [],
     "links": [
       {
-        "label": "Vimeo",
-        "url": "https://example.com/vimeo"
-      },
-      {
-        "label": "Instagram",
-        "url": "https://example.com/instagram"
-      },
-      {
-        "label": "IMDb",
-        "url": "https://example.com/imdb"
+        "label": "Vizzy.io",
+        "url": "https://vizzy.io/user?uid=HSaYCink8JM9HK4gFA5GFkJIMrK2"
       }
     ],
     "projects": [
