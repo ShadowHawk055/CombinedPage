@@ -385,7 +385,12 @@ function load() {
   try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s && s.a && s.b) return normalize(s); } catch (e) { }
   return normalize(clone(DEFAULTS));
 }
-let data = load();
+let data = normalize(clone(DEFAULTS));
+fetch('content.json', { cache: 'no-cache' })
+  .then(r => r.ok ? r.json() : Promise.reject())
+  .then(j => { data = normalize(j); })
+  .catch(() => { })          // falls back to DEFAULTS if the file is missing
+  .finally(() => go(true));  // start the page after loading
 const stripSession = (k, v) => Array.isArray(v) ? v.filter(x => !(x && x._session)) : v;
 let saveT;
 function save() { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(KEY, JSON.stringify(data, stripSession)); } catch (e) { } }, 200); }
