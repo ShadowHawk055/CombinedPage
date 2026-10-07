@@ -194,13 +194,10 @@ h2{font:700 1.7rem/1.15 var(--display);letter-spacing:-.02em;margin-bottom:1rem}
 .vid{display:block;width:100%;text-align:left;background:none;border:0;padding:0;cursor:pointer}
 .th{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000}
 .th canvas,.th video,.th img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.live{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none;opacity:0;transform:scale(1.35);transition:opacity .35s ease}
-.live.v{transform:none}
-.live.on{opacity:1}
 .th .dur{z-index:2}
 .frames{position:absolute;inset:0}
-.frames img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1);transition:opacity .4s ease,transform 2.4s ease-out}
-.frames img.on{opacity:1;transform:scale(1.07)}
+.frames img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0}
+.frames img.on{opacity:1}
 .dur{position:absolute;right:.7rem;bottom:.8rem;background:rgba(0,0,0,.6);color:#fff;font-size:.8rem;padding:.1rem .5rem;border-radius:6px}
 .vid h3{font:700 1.15rem var(--display);margin-top:.7rem}
 .vid p{color:var(--muted);font-size:.95rem}
@@ -1072,85 +1069,29 @@ function drawReel(c, w, h, t, it, title) {
     c.fillText(it.title || '', w * .05, h * .92);
   }
 }
-let liveOff = null, liveFrame = null;   // only one card plays its live preview at a time
-addEventListener('message', ev => {      // YouTube tells us when the preview is really playing, then we fade it in
-  if (!liveFrame || ev.source !== liveFrame.contentWindow) return;
-  let d = ev.data; try { if (typeof d === 'string') d = JSON.parse(d); } catch (e) { return; }
-  const st = d && (d.event === 'onStateChange' ? d.info : d.info && d.info.playerState);
-  if (st === 1) liveFrame.classList.add('on');
-});
 function initVideos(p) {
-  const touch = matchMedia('(hover: none)').matches;
-  const io = touch ? new IntersectionObserver(es => es.forEach(en => en.target._act && en.target._act(en.isIntersecting && en.intersectionRatio >= .6)), { threshold: [0, .6, 1] }) : null;
-  cleanups.push(() => io && io.disconnect());
+  // Cards are static: a still thumbnail, no hover or scroll animation.
   view.querySelectorAll('.vid').forEach(btn => {
     const it = p.videos[+btn.dataset.i], th = btn.querySelector('.th');
-    let on = () => { }, off = () => { };
-    // animated demo (also the fallback when a video or its thumbnails cannot be loaded)
-    const mountReel = () => {
+    const mountReel = () => {   // still picture, also used when a video or its thumbnails cannot be loaded
       th.querySelectorAll('video,canvas,.frames').forEach(n => n.remove());
       const cv = document.createElement('canvas'); cv.width = 640; cv.height = 360; th.prepend(cv);
-      const c = cv.getContext('2d'); let raf = 0, t0 = 0;
-      const still = () => drawReel(c, 640, 360, 1.8, it);
-      const loop = n => { drawReel(c, 640, 360, (n - t0) / 1000 + 1.8, it); raf = requestAnimationFrame(loop); };
-      still();
-      on = () => { cancelAnimationFrame(raf); t0 = performance.now(); raf = requestAnimationFrame(loop); };
-      off = () => { cancelAnimationFrame(raf); still(); };
-      cleanups.push(() => cancelAnimationFrame(raf));
+      drawReel(cv.getContext('2d'), 640, 360, 1.8, it);
     };
     const vd = th.querySelector('video'), fr = th.querySelector('.frames');
     if (th.querySelector('canvas')) mountReel();
     else if (vd) {
-      vd.addEventListener('loadeddata', () => { if (vd.currentTime < .1) { try { vd.currentTime = .5; } catch (e) { } } });
-      vd.addEventListener('error', mountReel);   // expired or broken link: show the animated demo instead of a black box
-      on = () => vd.play().catch(() => { }); off = () => vd.pause();
+      vd.muted = true; vd.pause();
+      vd.addEventListener('loadeddata', () => { if (vd.currentTime < .1) { try { vd.currentTime = .5; } catch (e) { } } vd.pause(); });
+      vd.addEventListener('error', mountReel);
     } else if (fr) {
-      // YouTube and Koutube: cycle through frames from the video while hovering (or while on screen on a phone)
-      let i = 0, timer = 0;
-      const show = k => [...fr.children].forEach((im, j) => im.classList.toggle('on', j === k));
-      show(0);
-      [...fr.children].forEach(im => im.addEventListener('error', () => { im.remove(); if (!fr.children.length) mountReel(); else show(0); }));
-      on = () => { clearInterval(timer); timer = setInterval(() => { i = (i + 1) % Math.max(1, fr.children.length); show(i); }, 750); };
-      off = () => { clearInterval(timer); i = 0; show(0); };
-      cleanups.push(() => clearInterval(timer));
-    }
-    // real footage preview, muted: YouTube / Koutube / Vimeo play in a hidden player that fades in once it is playing
-    const emb = embedUrl(it.src);
-    if (emb) {
-      const baseOn = on, baseOff = off, vimeo = /vimeo\.com/.test(emb), myOff = () => off();
-      let liveT = 0, frame = null;
-      const stopLive = () => { clearTimeout(liveT); if (frame) { if (liveFrame === frame) liveFrame = null; frame.remove(); frame = null; } if (liveOff === myOff) liveOff = null; };
-      const startLive = () => {
-        clearTimeout(liveT);
-        liveT = setTimeout(() => {
-          if (frame) return;
-          if (liveOff && liveOff !== myOff) liveOff();
-          liveOff = myOff;
-          const id = (/embed\/([\w-]{11})/.exec(emb) || [])[1], f = document.createElement('iframe');
-          f.className = 'live' + (vimeo ? ' v' : ''); f.tabIndex = -1; f.setAttribute('aria-hidden', 'true'); f.setAttribute('allow', 'autoplay; encrypted-media'); f.referrerPolicy = 'strict-origin-when-cross-origin';
-          f.src = vimeo ? emb + '?background=1&autoplay=1&muted=1&loop=1'
-            : emb + '&autoplay=1&mute=1&controls=0&loop=1&playlist=' + id + '&disablekb=1&fs=0&iv_load_policy=3&modestbranding=1&enablejsapi=1' + (/^https?:/.test(location.protocol) ? '&origin=' + encodeURIComponent(location.origin) : '');
-          if (vimeo) f.addEventListener('load', () => setTimeout(() => f.classList.add('on'), 900));
-          else f.addEventListener('load', () => { try { f.contentWindow.postMessage(JSON.stringify({ event: 'listening', id: 'preview', channel: 'widget' }), '*'); f.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'addEventListener', args: ['onStateChange'] }), '*'); } catch (e) { } });
-          th.insertBefore(f, th.querySelector('.dur')); frame = f; liveFrame = f;
-        }, 250);   // short pause so quickly passing the mouse over cards does not start players
-      };
-      on = () => { baseOn(); startLive(); };
-      off = () => { stopLive(); baseOff(); };
-      cleanups.push(stopLive);
-    }
-    if (vd) { vd.muted = true; vd.defaultMuted = true; vd.volume = 0; }
-    btn._act = a => a ? on() : off();
-    if (touch) io.observe(btn);
-    else {
-      btn.addEventListener('pointerenter', () => on()); btn.addEventListener('pointerleave', () => off());
-      btn.addEventListener('focus', () => on()); btn.addEventListener('blur', () => off());
+      if (fr.firstElementChild) fr.firstElementChild.classList.add('on');
+      [...fr.children].forEach((im, i) => im.addEventListener('error', () => { im.remove(); if (!fr.children.length) mountReel(); else fr.firstElementChild.classList.add('on'); }));
     }
   });
 }
 const modal = $('#modal'); let lastFocus = null, stopVideo = () => { };
 function openVideo(it, trigger) {
-  if (liveOff) liveOff();
   closeVideo(true); lastFocus = trigger;
   const stage = $('#mstage'), ctl = $('#mctl'), info = $('#minfo');
   const src = (it.src || '').trim(), emb = src && embedUrl(src);
