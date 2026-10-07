@@ -621,7 +621,7 @@ function parseHash() {
   return m ? { pid: m[1], page: m[2] } : { pid: cur.pid, page: cur.page };
 }
 let lastFx = '', fxBusy = false;
-const FX = ['slide'];   // transitions used when switching between the two profiles
+const FX = ['wipe'];   // transitions used when switching between the two profiles
 function profileFx(next, apply) {
   let fx; do { fx = FX[Math.random() * FX.length | 0]; } while (FX.length > 1 && fx === lastFx); lastFx = fx;
   const color = data[next.pid].accent, dir = next.pid === 'b' ? 1 : -1, made = [], E = 'cubic-bezier(.65,0,.25,1)', W = innerWidth, H = innerHeight;
