@@ -759,7 +759,7 @@ const PAGE = {
     <div class="vgrid" id="vgrid">${p.videos.map((v, i) => `
       <button class="vid" type="button" data-i="${i}" aria-label="Play ${esc(v.title)}">
         <div class="th">${ytFrames(v.src) ? `<div class="frames">${ytFrames(v.src).map(f => `<img src="${esc(f)}" alt="" loading="lazy">`).join('')}</div>` : (v.src || '').trim() && !embedUrl(v.src) ? `<video muted loop playsinline preload="metadata" src="${esc(v.src)}#t=0.5"></video>` : `<canvas width="640" height="360"></canvas>`}
-          <span class="dur">${fmt(+v.duration || 12)}</span></div>
+          </div>
         <h3>${esc(v.title)}</h3><p>${esc(v.description)}</p>
       </button>`).join('') || '<p class="empty">No videos yet.</p>'}</div>
     <div style="margin-top:2rem"><label class="btn small file">Play a video from your device<input type="file" id="vfile" accept="video/*"></label></div>`;
