@@ -194,6 +194,10 @@ h2{font:700 1.7rem/1.15 var(--display);letter-spacing:-.02em;margin-bottom:1rem}
 .vid{display:block;width:100%;text-align:left;background:none;border:0;padding:0;cursor:pointer}
 .th{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000}
 .th canvas,.th video,.th img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.live{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none;opacity:0;transform:scale(1.35);transition:opacity .35s ease}
+.live.v{transform:none}
+.live.on{opacity:1}
+.th .dur{z-index:2}
 .frames{position:absolute;inset:0}
 .frames img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1);transition:opacity .4s ease,transform 2.4s ease-out}
 .frames img.on{opacity:1;transform:scale(1.07)}
@@ -1068,6 +1072,13 @@ function drawReel(c, w, h, t, it, title) {
     c.fillText(it.title || '', w * .05, h * .92);
   }
 }
+let liveOff = null, liveFrame = null;   // only one card plays its live preview at a time
+addEventListener('message', ev => {      // YouTube tells us when the preview is really playing, then we fade it in
+  if (!liveFrame || ev.source !== liveFrame.contentWindow) return;
+  let d = ev.data; try { if (typeof d === 'string') d = JSON.parse(d); } catch (e) { return; }
+  const st = d && (d.event === 'onStateChange' ? d.info : d.info && d.info.playerState);
+  if (st === 1) liveFrame.classList.add('on');
+});
 function initVideos(p) {
   const touch = matchMedia('(hover: none)').matches;
   const io = touch ? new IntersectionObserver(es => es.forEach(en => en.target._act && en.target._act(en.isIntersecting && en.intersectionRatio >= .6)), { threshold: [0, .6, 1] }) : null;
@@ -1103,6 +1114,32 @@ function initVideos(p) {
       off = () => { clearInterval(timer); i = 0; show(0); };
       cleanups.push(() => clearInterval(timer));
     }
+    // real footage preview, muted: YouTube / Koutube / Vimeo play in a hidden player that fades in once it is playing
+    const emb = embedUrl(it.src);
+    if (emb) {
+      const baseOn = on, baseOff = off, vimeo = /vimeo\.com/.test(emb), myOff = () => off();
+      let liveT = 0, frame = null;
+      const stopLive = () => { clearTimeout(liveT); if (frame) { if (liveFrame === frame) liveFrame = null; frame.remove(); frame = null; } if (liveOff === myOff) liveOff = null; };
+      const startLive = () => {
+        clearTimeout(liveT);
+        liveT = setTimeout(() => {
+          if (frame) return;
+          if (liveOff && liveOff !== myOff) liveOff();
+          liveOff = myOff;
+          const id = (/embed\/([\w-]{11})/.exec(emb) || [])[1], f = document.createElement('iframe');
+          f.className = 'live' + (vimeo ? ' v' : ''); f.tabIndex = -1; f.setAttribute('aria-hidden', 'true'); f.setAttribute('allow', 'autoplay; encrypted-media'); f.referrerPolicy = 'strict-origin-when-cross-origin';
+          f.src = vimeo ? emb + '?background=1&autoplay=1&muted=1&loop=1'
+            : emb + '&autoplay=1&mute=1&controls=0&loop=1&playlist=' + id + '&disablekb=1&fs=0&iv_load_policy=3&modestbranding=1&enablejsapi=1' + (/^https?:/.test(location.protocol) ? '&origin=' + encodeURIComponent(location.origin) : '');
+          if (vimeo) f.addEventListener('load', () => setTimeout(() => f.classList.add('on'), 900));
+          else f.addEventListener('load', () => { try { f.contentWindow.postMessage(JSON.stringify({ event: 'listening', id: 'preview', channel: 'widget' }), '*'); f.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'addEventListener', args: ['onStateChange'] }), '*'); } catch (e) { } });
+          th.insertBefore(f, th.querySelector('.dur')); frame = f; liveFrame = f;
+        }, 250);   // short pause so quickly passing the mouse over cards does not start players
+      };
+      on = () => { baseOn(); startLive(); };
+      off = () => { stopLive(); baseOff(); };
+      cleanups.push(stopLive);
+    }
+    if (vd) { vd.muted = true; vd.defaultMuted = true; vd.volume = 0; }
     btn._act = a => a ? on() : off();
     if (touch) io.observe(btn);
     else {
@@ -1113,6 +1150,7 @@ function initVideos(p) {
 }
 const modal = $('#modal'); let lastFocus = null, stopVideo = () => { };
 function openVideo(it, trigger) {
+  if (liveOff) liveOff();
   closeVideo(true); lastFocus = trigger;
   const stage = $('#mstage'), ctl = $('#mctl'), info = $('#minfo');
   const src = (it.src || '').trim(), emb = src && embedUrl(src);
