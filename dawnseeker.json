@@ -1,12 +1,12 @@
 {
-  "name": "Dawnseeker",
+  "name": "Phoenix",
   "avatar": "PX",
   "accent": "#3d6bff",
   "location": "Laterano, Terra",
   "email": "phoenix.nation055@gmail.com",
   "roles": [
     "Audio Visualizer Artist",
-    "3D artist",
+    "3D Artist",
     "3D Animator"
   ],
   "tagline": "Believable fictional objects. Animated with kinetic mastery. Tying everything into what feels like a real product.\nClean and groundbreaking projects on the visualizer market. Expert of visual mimicry.",
@@ -189,7 +189,7 @@
     "lines": 10
   },
   "editorCode": {
-    "salt": "a7a9a37ea6b0b57d",
-    "hash": "ae2986aeb5c40652cd6feedec670d94db2666a876b250a71a6a854de4198644d"
+    "salt": "ce53d27beaab4eae",
+    "hash": "6d9bac3f83c10aafe2cfd7c69106ae21b6e12efb3a6cd226408455c87403778f"
   }
 }
