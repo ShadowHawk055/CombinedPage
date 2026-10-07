@@ -194,9 +194,9 @@ h2{font:700 1.7rem/1.15 var(--display);letter-spacing:-.02em;margin-bottom:1rem}
 .vid{display:block;width:100%;text-align:left;background:none;border:0;padding:0;cursor:pointer}
 .th{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000}
 .th canvas,.th video,.th img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.play{position:absolute;left:.8rem;bottom:.8rem;width:2.6rem;height:2.6rem;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;transition:transform .25s}
-.play svg{width:1rem;height:1rem;fill:currentColor;margin-left:2px}
-.vid:hover .play{transform:scale(1.12)}
+.frames{position:absolute;inset:0}
+.frames img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1);transition:opacity .4s ease,transform 2.4s ease-out}
+.frames img.on{opacity:1;transform:scale(1.07)}
 .dur{position:absolute;right:.7rem;bottom:.8rem;background:rgba(0,0,0,.6);color:#fff;font-size:.8rem;padding:.1rem .5rem;border-radius:6px}
 .vid h3{font:700 1.15rem var(--display);margin-top:.7rem}
 .vid p{color:var(--muted);font-size:.95rem}
@@ -621,7 +621,7 @@ function parseHash() {
   return m ? { pid: m[1], page: m[2] } : { pid: cur.pid, page: cur.page };
 }
 let lastFx = '', fxBusy = false;
-const FX = ['wipe'];   // transitions used when switching between the two profiles
+const FX = ['slide'];   // transitions used when switching between the two profiles
 function profileFx(next, apply) {
   let fx; do { fx = FX[Math.random() * FX.length | 0]; } while (FX.length > 1 && fx === lastFx); lastFx = fx;
   const color = data[next.pid].accent, dir = next.pid === 'b' ? 1 : -1, made = [], E = 'cubic-bezier(.65,0,.25,1)', W = innerWidth, H = innerHeight;
@@ -757,8 +757,8 @@ const PAGE = {
     <div class="page-h"><h2 style="margin:0;font-size:clamp(2.2rem,6vw,4rem)">Videos</h2><p>Select a video to watch it full size.</p></div>
     <div class="vgrid" id="vgrid">${p.videos.map((v, i) => `
       <button class="vid" type="button" data-i="${i}" aria-label="Play ${esc(v.title)}">
-        <div class="th">${ytThumb(v.src) ? `<img src="${esc(ytThumb(v.src))}" alt="" loading="lazy" onerror="this.remove()">` : (v.src || '').trim() && !embedUrl(v.src) ? `<video muted loop playsinline preload="metadata" src="${esc(v.src)}#t=0.5"></video>` : `<canvas width="640" height="360"></canvas>`}
-          <span class="play"><svg viewBox="0 0 24 24"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="dur">${fmt(+v.duration || 12)}</span></div>
+        <div class="th">${ytFrames(v.src) ? `<div class="frames">${ytFrames(v.src).map(f => `<img src="${esc(f)}" alt="" loading="lazy">`).join('')}</div>` : (v.src || '').trim() && !embedUrl(v.src) ? `<video muted loop playsinline preload="metadata" src="${esc(v.src)}#t=0.5"></video>` : `<canvas width="640" height="360"></canvas>`}
+          <span class="dur">${fmt(+v.duration || 12)}</span></div>
         <h3>${esc(v.title)}</h3><p>${esc(v.description)}</p>
       </button>`).join('') || '<p class="empty">No videos yet.</p>'}</div>
     <div style="margin-top:2rem"><label class="btn small file">Play a video from your device<input type="file" id="vfile" accept="video/*"></label></div>`;
@@ -1028,11 +1028,12 @@ function embedUrl(u) {
   const id11 = v => (/^[\w-]{11}/.exec(v || '') || [])[0];
   let id = null;
   if (host === 'youtu.be') id = id11(parts[0]);
-  else if (host === 'youtube.com' || host === 'youtube-nocookie.com') id = id11(x.searchParams.get('v')) || (['embed', 'shorts', 'live', 'v'].includes(parts[0]) ? id11(parts[1]) : null);
+  else if (host === 'youtube.com' || host === 'youtube-nocookie.com' || /(^|\.)koutube\./.test(host)) id = id11(x.searchParams.get('v')) || (['embed', 'shorts', 'live', 'v', 'watch'].includes(parts[0]) ? id11(parts[1]) : null) || (/koutube\./.test(host) ? id11(parts[0]) : null);
   if (id) { const t = parseInt(x.searchParams.get('t') || x.searchParams.get('start'), 10); return 'https://www.youtube-nocookie.com/embed/' + id + '?rel=0&playsinline=1' + (t > 0 ? '&start=' + t : ''); }
   if (host === 'vimeo.com' || host === 'player.vimeo.com') { const n = parts.find(p => /^\d+$/.test(p)); if (n) return 'https://player.vimeo.com/video/' + n; }
   return null;
 }
+function ytFrames(u) { const m = ytThumb(u); if (!m) return null; const b = m.replace('hqdefault.jpg', ''); return [m, b + 'hq1.jpg', b + 'hq2.jpg', b + 'hq3.jpg']; }
 function ytThumb(u) { const e = embedUrl(u), m = e && /youtube-nocookie\.com\/embed\/([\w-]{11})/.exec(e); return m ? 'https://i.ytimg.com/vi/' + m[1] + '/hqdefault.jpg' : null; }
 function drawReel(c, w, h, t, it, title) {
   const col = it.color || data[cur.pid].accent; const [r, g, b] = hexRgb(col);
@@ -1068,20 +1069,45 @@ function drawReel(c, w, h, t, it, title) {
   }
 }
 function initVideos(p) {
+  const touch = matchMedia('(hover: none)').matches;
+  const io = touch ? new IntersectionObserver(es => es.forEach(en => en.target._act && en.target._act(en.isIntersecting && en.intersectionRatio >= .6)), { threshold: [0, .6, 1] }) : null;
+  cleanups.push(() => io && io.disconnect());
   view.querySelectorAll('.vid').forEach(btn => {
-    const it = p.videos[+btn.dataset.i], cv = btn.querySelector('canvas'), vd = btn.querySelector('video');
-    if (cv) {
+    const it = p.videos[+btn.dataset.i], th = btn.querySelector('.th');
+    let on = () => { }, off = () => { };
+    // animated demo (also the fallback when a video or its thumbnails cannot be loaded)
+    const mountReel = () => {
+      th.querySelectorAll('video,canvas,.frames').forEach(n => n.remove());
+      const cv = document.createElement('canvas'); cv.width = 640; cv.height = 360; th.prepend(cv);
       const c = cv.getContext('2d'); let raf = 0, t0 = 0;
-      const still = () => drawReel(c, cv.width, cv.height, 1.8, it);
-      const loop = n => { drawReel(c, cv.width, cv.height, (n - t0) / 1000 + 1.8, it); raf = requestAnimationFrame(loop); };
+      const still = () => drawReel(c, 640, 360, 1.8, it);
+      const loop = n => { drawReel(c, 640, 360, (n - t0) / 1000 + 1.8, it); raf = requestAnimationFrame(loop); };
       still();
-      btn.addEventListener('pointerenter', () => { if (reduced) return; t0 = performance.now(); raf = requestAnimationFrame(loop); });
-      btn.addEventListener('pointerleave', () => { cancelAnimationFrame(raf); still(); });
+      on = () => { cancelAnimationFrame(raf); t0 = performance.now(); raf = requestAnimationFrame(loop); };
+      off = () => { cancelAnimationFrame(raf); still(); };
       cleanups.push(() => cancelAnimationFrame(raf));
+    };
+    const vd = th.querySelector('video'), fr = th.querySelector('.frames');
+    if (th.querySelector('canvas')) mountReel();
+    else if (vd) {
+      vd.addEventListener('loadeddata', () => { if (vd.currentTime < .1) { try { vd.currentTime = .5; } catch (e) { } } });
+      vd.addEventListener('error', mountReel);   // expired or broken link: show the animated demo instead of a black box
+      on = () => vd.play().catch(() => { }); off = () => vd.pause();
+    } else if (fr) {
+      // YouTube and Koutube: cycle through frames from the video while hovering (or while on screen on a phone)
+      let i = 0, timer = 0;
+      const show = k => [...fr.children].forEach((im, j) => im.classList.toggle('on', j === k));
+      show(0);
+      [...fr.children].forEach(im => im.addEventListener('error', () => { im.remove(); if (!fr.children.length) mountReel(); else show(0); }));
+      on = () => { clearInterval(timer); timer = setInterval(() => { i = (i + 1) % Math.max(1, fr.children.length); show(i); }, 750); };
+      off = () => { clearInterval(timer); i = 0; show(0); };
+      cleanups.push(() => clearInterval(timer));
     }
-    if (vd) {
-      btn.addEventListener('pointerenter', () => vd.play().catch(() => { }));
-      btn.addEventListener('pointerleave', () => vd.pause());
+    btn._act = a => a ? on() : off();
+    if (touch) io.observe(btn);
+    else {
+      btn.addEventListener('pointerenter', () => on()); btn.addEventListener('pointerleave', () => off());
+      btn.addEventListener('focus', () => on()); btn.addEventListener('blur', () => off());
     }
   });
 }
