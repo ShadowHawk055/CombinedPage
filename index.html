@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Oxanium:wght@200..800&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 <style>
 @property --accent{syntax:'<color>';inherits:true;initial-value:#3d6bff}
 :root{
@@ -255,6 +254,83 @@ footer{max-width:1180px;margin:0 auto;padding:1.5rem clamp(1rem,4vw,2.5rem) 2.5r
   .m-wrap{grid-template-columns:1fr}
   .tg{display:none}
   .rthumb{width:4.6rem;height:2.7rem}
+}
+
+/* ---------- phones: compact header, tidy sections, comfortable tap targets ---------- */
+html{-webkit-text-size-adjust:100%}
+body{overflow-x:hidden}
+.nav{scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+.nav::-webkit-scrollbar{display:none}
+.nav a{white-space:nowrap;scroll-snap-align:center}
+@media (max-width:640px){
+  body{font-size:1rem}
+  /* header: row 1 = logo, person switch, tools. row 2 = page links (swipe sideways if needed) */
+  .top{gap:.45rem .6rem;padding:.5rem 1rem .4rem}
+  .brand{min-width:0}
+  #brandName{display:none}
+  .seg{margin-left:auto}
+  .seg button{padding:.4rem .8rem;font-size:.88rem;min-height:2.2rem}
+  .icon{width:2.4rem;height:2.4rem}
+  .nav{gap:.1rem;margin:0 -1rem;padding:0 1rem;width:calc(100% + 2rem)}
+  .nav a{padding:.5rem .7rem;font-size:.9rem}
+  main{padding:1.4rem 1rem 3rem}
+  h2{font-size:1.5rem}
+  /* about */
+  .hero{gap:1.2rem;padding-bottom:1.8rem}
+  .name{font-size:clamp(2.5rem,12.5vw,4.5rem)}
+  .role{margin-top:1rem;font-size:1.2rem}
+  .lede{font-size:1.02rem;margin-top:.8rem}
+  .cta{margin-top:1.2rem}
+  .cta .btn{flex:1 1 9rem;justify-content:center}
+  .portrait{width:120px}
+  .band{gap:1.1rem;padding-block:1.8rem}
+  .bio p{font-size:1.08rem}
+  .stats{grid-template-columns:1fr 1fr;gap:1.2rem .9rem}
+  .stats dd{font-size:2rem}
+  .stats dt{font-size:.88rem}
+  .skills li{grid-template-columns:minmax(5.5rem,7.5rem) 1fr;gap:.8rem}
+  .tl li{padding-bottom:1.3rem}
+  .links{gap:.5rem 1.2rem}
+  /* work */
+  .page-h{gap:.4rem}
+  .chips{margin:1rem 0 1.4rem}
+  .rh{gap:.8rem;padding:1rem .2rem}
+  .rthumb{order:-1;width:4.2rem;height:2.5rem}
+  .t{font-size:1.2rem;line-height:1.15}
+  .rb p{padding:0 .2rem;font-size:1rem}
+  .rb a{margin:.8rem .2rem 1.4rem}
+  .pvw{margin:0 .2rem 1rem}
+  /* commissions */
+  .opt{padding:1.4rem 0;gap:1rem}
+  .opt.feat{padding-inline:1rem}
+  .o-side{width:100%;grid-template-columns:1fr auto;align-items:center;justify-items:stretch}
+  .o-side .price{justify-self:start}
+  .o-side .btn{justify-content:center}
+  /* 3D */
+  #stage{min-height:260px;border-radius:16px}
+  .m-wrap{margin-top:1.2rem;gap:1.1rem}
+  .toggles .tog{padding:.5rem .9rem}
+  .sw button{width:2rem;height:2rem}
+  /* videos */
+  .vgrid{gap:1.6rem 1rem;margin-top:1.3rem}
+  .mbox{border-radius:12px}
+  .mbar{padding:.8rem 1rem 1rem;flex-wrap:wrap}
+  /* dialogs, toast, editor */
+  .toast{white-space:normal;text-align:center;width:max-content;max-width:calc(100% - 2rem)}
+  .cbox{padding:1.1rem}
+  .drawer{width:100%;border-left:0}
+  .dh,.dnote,.tabs{padding-left:1rem;padding-right:1rem}
+  .dbody{padding:0 1rem 1.5rem}
+  .dfoot{padding:.7rem 1rem calc(.7rem + env(safe-area-inset-bottom,0px))}
+  .f input[type=text],.f input[type=number],.f select,.f textarea,.cbox input,#newCode{font-size:16px}
+  #json{font-size:16px;min-height:42vh}
+  .mini{padding:.5rem .85rem}
+  footer{padding:1.2rem 1rem 2rem;font-size:.85rem}
+}
+@media (max-width:360px){
+  .seg button{padding:.4rem .6rem;font-size:.84rem}
+  .nav a{padding:.5rem .55rem;font-size:.86rem}
+  .stats dd{font-size:1.7rem}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
@@ -573,6 +649,7 @@ function renderChrome(p) {
   $('#brandName').textContent = p.name;
   $('#brand').href = `#${cur.pid}/about`;
   $('#nav').innerHTML = PAGES.map(([id, l]) => `<a href="#${cur.pid}/${id}"${id === cur.page ? ' aria-current="page"' : ''}>${l}</a>`).join('');
+  { const nv = $('#nav'), ac = nv.querySelector('[aria-current]'); if (ac && nv.scrollWidth > nv.clientWidth) nv.scrollLeft = ac.offsetLeft - (nv.clientWidth - ac.offsetWidth) / 2; }
   const seg = $('#seg'); seg.dataset.i = cur.pid === 'a' ? 0 : 1;
   seg.querySelectorAll('button').forEach(b => { b.textContent = first(data[b.dataset.p].name) || 'Person'; b.setAttribute('aria-pressed', b.dataset.p === cur.pid); });
   $('#foot').textContent = `${p.name}. ${p.email ? 'Contact: ' + p.email + '. ' : ''}${new Date().getFullYear()} | code goldfish`;
