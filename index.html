@@ -1027,7 +1027,7 @@ function embedUrl(u) {
   const host = x.hostname.replace(/^(www|m|music)\./i, '').toLowerCase(), parts = x.pathname.split('/').filter(Boolean);
   const id11 = v => (/^[\w-]{11}/.exec(v || '') || [])[0];
   let id = null;
-  if (host === 'youtu.be') id = id11(parts[0]);
+  if (host === 'youtu.be' || host === 'koutu.be') id = id11(parts[0]);
   else if (host === 'youtube.com' || host === 'youtube-nocookie.com' || /(^|\.)koutube\./.test(host)) id = id11(x.searchParams.get('v')) || (['embed', 'shorts', 'live', 'v', 'watch'].includes(parts[0]) ? id11(parts[1]) : null) || (/koutube\./.test(host) ? id11(parts[0]) : null);
   if (id) { const t = parseInt(x.searchParams.get('t') || x.searchParams.get('start'), 10); return 'https://www.youtube-nocookie.com/embed/' + id + '?rel=0&playsinline=1' + (t > 0 ? '&start=' + t : ''); }
   if (host === 'vimeo.com' || host === 'player.vimeo.com') { const n = parts.find(p => /^\d+$/.test(p)); if (n) return 'https://player.vimeo.com/video/' + n; }
