@@ -65,12 +65,16 @@
   ],
   "links": [
     {
-      "label": "vizzy.io",
+      "label": "Vizzy.io",
       "url": "https://vizzy.io/user?uid=hdrv5CQqwvbSrN3mzCUwnP0BqjG3"
     },
     {
-      "label": "youtube.com",
+      "label": "YouTube.com",
       "url": "https://www.youtube.com/@phoenixmusic2841"
+    },
+    {
+      "label": "Discord @just.phoenix",
+      "url": ""
     }
   ],
   "projects": [
